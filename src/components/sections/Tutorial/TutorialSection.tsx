@@ -4,8 +4,11 @@ import { motion } from "framer-motion"
 import Image from "next/image"
 import type React from "react"
 
+// --- TUTORIAL CARD ---
 const TutorialCard = ({ title, imageSrc, steps }: { title: string; imageSrc: string; steps: React.ReactNode[] }) => (
   <motion.div
+    suppressHydrationWarning={true}
+    
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true }}
@@ -22,6 +25,7 @@ const TutorialCard = ({ title, imageSrc, steps }: { title: string; imageSrc: str
   >
     <div className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] bg-gradient-to-br from-white/[0.05] via-transparent to-transparent rotate-12 pointer-events-none blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
+    {/* Header Card (Icon & Title) */}
     <div className="relative z-10 flex items-center gap-5 mb-8 border-b border-white/5 pb-6">
       <div className="bg-white/5 border border-white/10 p-3 rounded-2xl group-hover:scale-110 group-hover:border-orange-500/30 transition-all duration-300 relative w-16 h-16 flex items-center justify-center shadow-lg">
         <div className="relative w-10 h-10">
@@ -38,6 +42,7 @@ const TutorialCard = ({ title, imageSrc, steps }: { title: string; imageSrc: str
       </h3>
     </div>
 
+    {/* Steps List */}
     <ul className="relative z-10 space-y-4 text-left">
       {steps.map((step, i) => (
         <li key={i} className="flex gap-4 text-white/80 leading-relaxed font-medium">
