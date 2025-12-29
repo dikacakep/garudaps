@@ -52,6 +52,7 @@ Open http://localhost:3000 with your browser to see the result.
 
 ### 📂 Project Structure
 
+````
 ├── public/
 │ ├── audio/ # Place your bgm.mp3 here
 │ └── images/ # All static images (logos, icons, team)
@@ -65,4 +66,5 @@ Open http://localhost:3000 with your browser to see the result.
 │ │ ├── layout/ # Navbar & Footer
 │ │ └── sections/ # Page sections (Hero, Features, Tutorial)
 │ └── lib/ # Utilities
-└── ...
+└── ...```
+````
