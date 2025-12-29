@@ -1,37 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🦅 GarudaPS - Growtopia Private Server Website
 
-## Getting Started
+![GarudaPS Banner](public/images/banner.jpg)
 
-First, run the development server:
+> A premium, high-performance landing page for **GarudaPS**. Built with **Next.js 14 (App Router)**, **Tailwind CSS**, and **Framer Motion**, featuring ultra-realistic Glassmorphism UI, immersive audio, and animated background particles.
+
+## ✨ Key Features
+
+- **👻 Floating Ghost Particles**: Custom animated background characters that float randomly across the screen using Framer Motion.
+- **🎵 Immersive Audio System**: "Enter World" overlay screen that bypasses browser autoplay restrictions to play background music (`bgm.mp3`).
+- **📱 Fully Responsive**: Optimized for Desktop, Tablet, and Mobile.
+- **🟢 Live Server Status**: Pulsing indicator for server uptime and player count.
+- **🔄 Infinite Carousel**: Auto-scrolling features section with smooth fade gradients.
+- **📚 Dynamic Tutorials**: Step-by-step guides for connecting via Windows, Android, iOS, and Mac.
+
+## 🛠️ Tech Stack
+
+- **Framework**: [Next.js 14](https://nextjs.org/) (App Router)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Animation**: [Framer Motion](https://www.framer.com/motion/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+
+## 🚀 Getting Started
+
+Follow these steps to run the project locally:
+
+### 1. Clone the repository
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone [https://github.com/ryhndastra/garudaps.git](https://github.com/ryhndastra/garudaps.git)
+cd garudaps-web
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Install dependencies
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+npm install
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# or
 
-## Learn More
+yarn install
 
-To learn more about Next.js, take a look at the following resources:
+# or
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+pnpm install
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 3. Run the development server
 
-## Deploy on Vercel
+`npm run dev`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# garudaps
+Open http://localhost:3000 with your browser to see the result.
