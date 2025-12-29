@@ -153,12 +153,12 @@ export default function TutorialSection() {
           </a>
         </span>,
         "Open App → Click 'SELECT HOSTS FILE'",
-        "Select the downloaded file (e.g. MAFIAPS-HOST.txt)",
+        "Select the downloaded file",
         "Turn ON (Green) → Open Growtopia",
       ],
     },
     {
-      title: "Mac / iOS",
+      title: "Mac",
       imageSrc: "/images/icons/mac.png", 
       steps: [
         <span key="finder">
