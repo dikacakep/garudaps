@@ -4,7 +4,6 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Updated to a bold gaming theme with high-contrast orange and black */
   --background: oklch(0.12 0 0);
   --foreground: oklch(0.98 0.01 45);
   --card: oklch(0.15 0 0);
@@ -138,16 +137,12 @@
     }
   }
 
-  /* added gradient and scroll animations */
   @keyframes gradient-move {
     0% {
       background-position: 0% 50%;
     }
-    50% {
-      background-position: 100% 50%;
-    }
     100% {
-      background-position: 0% 50%;
+      background-position: -200% 50%;
     }
   }
 
@@ -160,7 +155,7 @@
     }
   }
 
-  --animate-gradient: gradient-move 3s ease infinite;
+  --animate-gradient: gradient-move 3s linear infinite;
   --animate-scroll: scroll 40s linear infinite;
 }
 
@@ -175,17 +170,18 @@
 
 @layer utilities {
   .animate-gradient-text {
-    /* Updated to orange -> yellow -> white gradient */
     background: linear-gradient(90deg, #ff5c00, #ffc400, #ffffff, #ffc400, #ff5c00);
-    background-size: 300% auto;
+    
+    background-size: 200% auto;
+    
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    animation: gradient-move 4s ease infinite;
+    
+    animation: gradient-move 4s linear infinite;
   }
 
   .glass-effect {
-    /* Refined semi-transparent glassy blur */
     background: rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -193,7 +189,6 @@
   }
 
   .glass-effect-strong {
-    /* Refined strong semi-transparent glassy blur */
     background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
@@ -205,9 +200,10 @@
   }
 
   .btn-gradient-hover:hover {
-    /* Updated button hover to match requested orange -> yellow -> white animated gradient. */
-    background: linear-gradient(90deg, #ff5c00, #ffc400, #ffffff);
+    background: linear-gradient(90deg, #ff5c00, #ffc400, #ffffff, #ffc400, #ff5c00);
+    
     background-size: 200% auto;
+    
     animation: gradient-move 2s linear infinite;
     color: #000 !important;
     border-color: transparent;
