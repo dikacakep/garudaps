@@ -1,16 +1,15 @@
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import FloatingGhosts from "@/components/effects/FloatingGhosts";
 
 export const metadata = {
   title: "GarudaPS – Growtopia Private Server",
   description: "Garuda Private Server official website",
   
-  // TAMBAHKAN BAGIAN INI:
   icons: {
-    // Pastikan file gambarnya ada di folder public/images/logo/
     icon: "/images/logo/GARUDAPS2026.png", 
-    apple: "/images/logo/GARUDAPS2026.png", // (Opsional) Biar di iPhone juga muncul
+    apple: "/images/logo/GARUDAPS2026.png",
   },
 };
 
@@ -22,6 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-[#1a1a1a] text-slate-100">
+        <FloatingGhosts />
         <Navbar />
         {children}
         <Footer />
