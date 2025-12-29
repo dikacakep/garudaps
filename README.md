@@ -34,18 +34,35 @@ cd garudaps-web
 
 ### 2. Install dependencies
 
-npm install
+`npm install`
 
 # or
 
-yarn install
+`yarn install`
 
 # or
 
-pnpm install
+`pnpm install`
 
 ### 3. Run the development server
 
 `npm run dev`
 
 Open http://localhost:3000 with your browser to see the result.
+
+### 📂 Project Structure
+
+├── public/
+│ ├── audio/ # Place your bgm.mp3 here
+│ └── images/ # All static images (logos, icons, team)
+├── src/
+│ ├── app/
+│ │ ├── layout.tsx # Root layout (Includes WelcomeScreen & FloatingGhosts)
+│ │ └── page.tsx # Main Home Page composition
+│ ├── components/
+│ │ ├── common/ # Global components (e.g., WelcomeScreen.tsx)
+│ │ ├── effects/ # Visual effects (e.g., FloatingGhosts.tsx)
+│ │ ├── layout/ # Navbar & Footer
+│ │ └── sections/ # Page sections (Hero, Features, Tutorial)
+│ └── lib/ # Utilities
+└── ...
