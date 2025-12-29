@@ -168,7 +168,6 @@ export default function Community() {
                       src={`https://discord.com/widget?id=${discordServerId}&theme=dark`} 
                       width="100%" 
                       height="100%" 
-                      allowtransparency="true" 
                       frameBorder="0" 
                       sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
                       className="absolute inset-0 w-full h-full"
