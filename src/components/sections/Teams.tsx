@@ -1,187 +1,250 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
+import { Crown, Code, Shield, Users, Sparkles } from "lucide-react"
 
 const teamMembers = [
   {
+    id: "irexus",
     name: "iRexus",
     role: "Server Owner",
-    avatar: "/images/team/iRexus.png", 
-    quote: "Building a world where players rule. Dedicated to making GarudaPs the best GT server.",
+    avatar: "/images/team/iRexus.png",
+    color: "#EAB308", 
+    stats: "01",
+    icon: Crown,
+    desc: "Building a world where players rule."
   },
   {
+    id: "stargel",
     name: "StarGel",
-    role: "Server Developer",
+    role: "Lead Developer",
     avatar: "/images/team/StarGel.png",
-    quote: "Code is poetry. Every feature is crafted with precision to ensure zero lag and max fun.",
+    color: "#3B82F6", 
+    stats: "02",
+    icon: Code,
+    desc: "Code is poetry. Zero lag, max fun."
   },
   {
+    id: "rasha",
     name: "Rasha",
-    role: "Server Staff",
+    role: "Senior Staff",
     avatar: "/images/team/Rasha.png",
-    quote: "Here to listen, help, and keep the community vibe positive and welcoming for everyone.",
+    color: "#22C55E", 
+    stats: "03",
+    icon: Shield,
+    desc: "Keeping the community vibe positive."
   },
   {
+    id: "sho",
     name: "Sho",
     role: "Server Staff",
     avatar: "/images/team/Sho.png",
-    quote: "Fair play is my priority. Ensuring a safe environment for all our players.",
+    color: "#22C55E", 
+    stats: "04",
+    icon: Shield,
+    desc: "Fair play is my priority."
+  },
+  {
+    id: "aed",
+    name: "Aed",
+    role: "Community Manager",
+    avatar: "/images/team/Aed.png",
+    color: "#A855F7", 
+    stats: "05",
+    icon: Users,
+    desc: "Bridging the gap between players and devs."
+  },
+  {
+    id: "dexton",
+    name: "Dexton",
+    role: "Server Staff",
+    avatar: "/images/team/dexton.png",
+    color: "#22C55E", 
+    stats: "06",
+    icon: Shield,
+    desc: "Ready to assist! Maintaining order."
   },
 ]
 
 export default function Teams() {
-  const scrollRef1 = useRef<HTMLDivElement>(null)
-  const scrollRef2 = useRef<HTMLDivElement>(null)
-
-  // Logic Scrolling 1
+  const [activeId, setActiveId] = useState(teamMembers[0].id)
+  const [isPaused, setIsPaused] = useState(false)
+  
   useEffect(() => {
-    const scrollContainer = scrollRef1.current
-    if (!scrollContainer) return
-    let animationId: number
-    let scrollPosition = 0
-    const scroll = () => {
-      scrollPosition += 0.5 
-      // Reset saat mencapai setengah
-      if (scrollContainer.scrollWidth && scrollPosition >= scrollContainer.scrollWidth / 2) {
-        scrollPosition = 0
-      }
-      scrollContainer.scrollLeft = scrollPosition
-      animationId = requestAnimationFrame(scroll)
-    }
-    animationId = requestAnimationFrame(scroll)
-    return () => cancelAnimationFrame(animationId)
-  }, [])
+    if (isPaused) return;
 
-  // Logic Scrolling 2 
-  useEffect(() => {
-    const scrollContainer = scrollRef2.current
-    if (!scrollContainer) return
-    let animationId: number
-    let scrollPosition = scrollContainer.scrollWidth / 2 
-    const scroll = () => {
-      scrollPosition -= 0.5
-      if (scrollPosition <= 0) {
-        scrollPosition = scrollContainer.scrollWidth / 2
-      }
-      scrollContainer.scrollLeft = scrollPosition
-      animationId = requestAnimationFrame(scroll)
-    }
-    animationId = requestAnimationFrame(scroll)
-    return () => cancelAnimationFrame(animationId)
-  }, [])
+    const interval = setInterval(() => {
+      setActiveId((currentId) => {
+        const currentIndex = teamMembers.findIndex(m => m.id === currentId);
+        const nextIndex = (currentIndex + 1) % teamMembers.length;
+        return teamMembers[nextIndex].id;
+      });
+    }, 4000); 
+
+    return () => clearInterval(interval);
+  }, [isPaused, activeId]);
 
   return (
-    <section id="teams" className="py-24 relative overflow-hidden bg-[#0a0a0a]">
+    <section id="teams" className="py-24 min-h-screen bg-linear-to-b from-black to-[#0a0a0a] relative flex items-center justify-center overflow-hidden">
       
-      {/* Background Glow Effect */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-orange-500/5 blur-[120px] rounded-full pointer-events-none" />
+      {/* Background */}
+      <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-[-20%] left-[-10%] w-200 h-200 bg-orange-600/5 blur-[120px] rounded-full" />
+          <div className="absolute bottom-[-20%] right-[-10%] w-200 h-200 bg-blue-600/5 blur-[120px] rounded-full" />
+          <div className="absolute inset-0 opacity-[0.02] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay" />
+      </div>
 
-      <div className="container px-4 mx-auto mb-16 relative z-10">
-        <div className="text-center">
-          <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-4 text-white">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-orange-500 via-white to-orange-500 animate-gradient-text bg-300% underline decoration-[#ff5c00] decoration-4 underline-offset-8">
-              Server
-            </span>{" "}
-            Team
+      <div className="container px-4 mx-auto relative z-10">
+        
+        {/* Header */}
+        <div className="text-center mb-16">
+          <motion.div 
+             initial={{ opacity: 0, y: -20 }}
+             whileInView={{ opacity: 1, y: 0 }}
+             className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-4 backdrop-blur-md"
+          >
+            <Sparkles className="w-3 h-3 text-orange-400" />
+            <span className="text-[10px] font-mono text-white/60 tracking-widest uppercase">The Authority</span>
+          </motion.div>
+          
+          <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tight">
+            Server{" "}
+            <span className="bg-clip-text text-transparent bg-linear-to-r from-orange-500 via-yellow-200 to-orange-500 animate-gradient-text bg-300% underline decoration-orange-500 decoration-4 underline-offset-8">
+              Team
+            </span>
           </h2>
-          <p className="text-white/60 text-lg mt-4 max-w-2xl mx-auto">
-            The Architects of Seamless Server Operations
-          </p>
         </div>
-      </div>
 
-      {/* --- ROW 1: Scrolling Left --- */}
-      <div className="relative w-full overflow-hidden mb-8 z-10">
-        {/* Fade Gradient di Kiri Kanan supaya smooth */}
-        <div className="absolute left-0 top-0 bottom-0 w-24 md:w-40 bg-gradient-to-r from-[#0a0a0a] to-transparent z-20 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-24 md:w-40 bg-gradient-to-l from-[#0a0a0a] to-transparent z-20 pointer-events-none" />
-
-        <div
-          ref={scrollRef1}
-          className="flex gap-6 overflow-hidden whitespace-nowrap"
-          style={{ scrollBehavior: "auto" }}
+        {/* --- ACCORDION --- */}
+        <div 
+            className="flex flex-col lg:flex-row gap-3 h-175 lg:h-137.5 w-full max-w-7xl mx-auto"
+            onMouseEnter={() => setIsPaused(true)} 
+            onMouseLeave={() => setIsPaused(false)} 
         >
-          {[...teamMembers, ...teamMembers].map((member, index) => (
-            <div key={`row1-${member.name}-${index}`} className="inline-block w-[350px] md:w-[400px] flex-shrink-0">
-              <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-[24px] p-6 h-full hover:border-orange-500/50 hover:bg-white/10 transition-all duration-300 group cursor-default">
-                
-                {/* Header Card: Avatar & Nama */}
-                <div className="flex items-center gap-4 mb-4">
-                  {/* AVATAR CONTAINER */}
-                  <div className="relative w-16 h-16 rounded-2xl overflow-hidden border-2 border-white/10 group-hover:border-orange-500 transition-colors shadow-lg">
-                    {/* Fallback jika gambar error/loading bisa dihandle di sini, tapi defaultnya cukup src */}
+          {teamMembers.map((member) => {
+            const isActive = activeId === member.id;
+            const Icon = member.icon;
+            
+            return (
+              <motion.div
+                key={member.id}
+                layout 
+                onClick={() => setActiveId(member.id)}
+                className={`relative rounded-3xl overflow-hidden cursor-pointer border transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]
+                    ${isActive 
+                        ? "flex-5 lg:flex-[3.5] border-white/20 bg-[#0a0a0a]" 
+                        : "flex-1 border-white/5 bg-black/40 hover:bg-white/5" 
+                    }
+                `}
+              >
+                {/* BACKGROUND IMAGE  */}
+                <div className="absolute inset-0 z-0 h-full w-full">
                     <Image 
                         src={member.avatar} 
-                        alt={member.name}
-                        fill
-                        className="object-cover transform group-hover:scale-110 transition-transform duration-500"
+                        alt={member.name} 
+                        fill 
+                        className={`object-cover transition-transform duration-1000 ease-out 
+                            ${isActive 
+                                ? "scale-105 grayscale-0 opacity-100" 
+                                : "scale-100 grayscale opacity-40 group-hover:opacity-60"
+                            }
+                        `}
                     />
-                  </div>
-                  
-                  <div>
-                    <h3 className="text-xl font-black text-white group-hover:text-orange-500 transition-colors">
-                      {member.name}
-                    </h3>
-                    <div className="inline-block px-2 py-0.5 rounded bg-orange-500/10 border border-orange-500/20">
-                        <p className="text-xs text-orange-400 font-bold uppercase tracking-wider">{member.role}</p>
-                    </div>
-                  </div>
+                    
+                    {/* Dark Gradient Overlay */}
+                    <div className={`absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent transition-opacity duration-500 ${isActive ? 'opacity-90' : 'opacity-80'}`} />
+                    
+                    {/* Color Glow Overlay (Active Only) */}
+                    <div 
+                        className={`absolute inset-0 bg-linear-to-b from-transparent to-black/90 transition-opacity duration-500 ${isActive ? 'opacity-100' : 'opacity-0'}`} 
+                        style={{ mixBlendMode: 'multiply' }}
+                    />
                 </div>
 
-                {/* Quote */}
-                <p className="text-white/60 text-sm leading-relaxed whitespace-normal italic border-l-2 border-white/10 pl-3">
-                  "{member.quote}"
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+                {/* PROGRESS BAR  */}
+                {isActive && !isPaused && (
+                    <motion.div 
+                        className="absolute bottom-0 left-0 h-1 z-30 bg-white"
+                        style={{ backgroundColor: member.color, boxShadow: `0 0 10px ${member.color}` }}
+                        initial={{ width: "0%" }}
+                        animate={{ width: "100%" }}
+                        transition={{ duration: 4, ease: "linear" }}
+                    />
+                )}
 
-      {/* --- ROW 2: Scrolling Right --- */}
-      <div className="relative w-full overflow-hidden z-10">
-        <div className="absolute left-0 top-0 bottom-0 w-24 md:w-40 bg-gradient-to-r from-[#0a0a0a] to-transparent z-20 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-24 md:w-40 bg-gradient-to-l from-[#0a0a0a] to-transparent z-20 pointer-events-none" />
+                {/* INACTIVE STATE (Vertical Text) */}
+                {!isActive && (
+                    <div className="absolute inset-0 z-10 flex items-center justify-center">
+                         <div className="lg:[writing-mode:vertical-rl] lg:rotate-180 flex items-center gap-4 opacity-50">
+                            <h3 className="text-sm md:text-lg font-bold text-white tracking-[0.2em] uppercase whitespace-nowrap">
+                                {member.name}
+                            </h3>
+                            <span className="text-[10px] font-mono text-white/40">{member.stats}</span>
+                         </div>
+                    </div>
+                )}
 
-        <div
-          ref={scrollRef2}
-          className="flex gap-6 overflow-hidden whitespace-nowrap"
-          style={{ scrollBehavior: "auto" }}
-        >
-          {/* Direverse atau di-shuffle kalau mau beda urutan, tapi default sama oke */}
-          {[...teamMembers, ...teamMembers].reverse().map((member, index) => (
-            <div key={`row2-${member.name}-${index}`} className="inline-block w-[350px] md:w-[400px] flex-shrink-0">
-               <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-[24px] p-6 h-full hover:border-orange-500/50 hover:bg-white/10 transition-all duration-300 group cursor-default">
+                {/* ACTIVE STATE CONTENT */}
+                <AnimatePresence>
+                {isActive && (
+                    <motion.div 
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.5, delay: 0.2 }}
+                        className="absolute inset-0 z-20 p-6 md:p-10 flex flex-col justify-end"
+                    >
+                        <div className="absolute -top-10 -right-10 text-[150px] font-black text-white/5 select-none leading-none z-0">
+                            {member.stats}
+                        </div>
+
+                        <div className="relative z-10">
+                            
+                            {/* Role Label */}
+                            <div className="flex items-center gap-3 mb-3">
+                                <div className="px-2 py-1 rounded bg-white/10 border border-white/10 backdrop-blur-md flex items-center gap-2">
+                                    <Icon className="w-3 h-3" style={{ color: member.color }} />
+                                    <span className="text-[10px] font-bold text-white uppercase tracking-wider">{member.role}</span>
+                                </div>
+                            </div>
+                            
+                            {/* Name */}
+                            <h3 className="text-4xl md:text-6xl font-black text-white uppercase leading-[0.9] mb-4 tracking-tighter drop-shadow-lg">
+                                {member.name}
+                            </h3>
+                            
+                            {/* Quote/Desc */}
+                            <div className="relative pl-4 border-l-2" style={{ borderColor: member.color }}>
+                                <p className="text-white/80 font-medium text-sm md:text-base max-w-md leading-relaxed">
+                                    &quot;{member.desc}&quot;
+                                </p>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+                </AnimatePresence>
                 
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="relative w-16 h-16 rounded-2xl overflow-hidden border-2 border-white/10 group-hover:border-orange-500 transition-colors shadow-lg">
-                    <Image 
-                        src={member.avatar} 
-                        alt={member.name}
-                        fill
-                        className="object-cover transform group-hover:scale-110 transition-transform duration-500"
-                    />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-black text-white group-hover:text-orange-500 transition-colors">
-                      {member.name}
-                    </h3>
-                    <div className="inline-block px-2 py-0.5 rounded bg-orange-500/10 border border-orange-500/20">
-                        <p className="text-xs text-orange-400 font-bold uppercase tracking-wider">{member.role}</p>
-                    </div>
-                  </div>
-                </div>
+                {/* Border Glow Active */}
+                <div className={`absolute inset-0 border-2 rounded-3xl pointer-events-none transition-all duration-500 ${isActive ? 'border-white/10' : 'border-transparent'}`} 
+                     style={{ borderColor: isActive ? `${member.color}40` : '' }} 
+                />
 
-                <p className="text-white/60 text-sm leading-relaxed whitespace-normal italic border-l-2 border-white/10 pl-3">
-                  "{member.quote}"
-                </p>
-              </div>
-            </div>
-          ))}
+              </motion.div>
+            )
+          })}
         </div>
-      </div>
+        
+        {/* Helper Text */}
+        <div className="flex justify-center gap-6 mt-8 opacity-40">
+            <div className="flex items-center gap-2 text-[10px] font-mono text-white uppercase">
+                <Users className="w-3 h-3" />
+                <span>Hover to Pause</span>
+            </div>
+        </div>
 
+      </div>
     </section>
   )
 }

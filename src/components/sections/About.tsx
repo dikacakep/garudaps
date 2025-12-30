@@ -5,103 +5,137 @@ import Image from "next/image"
 
 export default function About() {
   return (
-    <section id="about" className="pt-24 pb-40 relative overflow-hidden bg-[#0a0a0a]">
+    <section id="about" className="relative py-40 overflow-hidden bg-[#0a0a0a]">
       
-      <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-[#0a0a0a] z-20 pointer-events-none -translate-y-full" />
-      <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#0a0a0a] to-transparent z-20 pointer-events-none" />
+      {/* =========================================================
+          BACKGROUND SYSTEM
+         ========================================================= */}
+      
+      {/* 1. Connector Gradients */}
+      <div className="absolute top-0 left-0 w-full h-64 bg-linear-to-b from-black via-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-full h-64 bg-linear-to-t from-black via-[#0a0a0a] to-transparent z-10 pointer-events-none" />
 
-      {/* Container */}
-      <div className="w-full max-w-[95%] px-4 mx-auto relative z-10">
+      {/* 2. Cyber Grid (Bakal kelihatan jelas karena kacanya bening) */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808005_1px,transparent_1px),linear-gradient(to_bottom,#80808005_1px,transparent_1px)] bg-size-[40px_40px] pointer-events-none z-0" />
+
+      {/* 3. Central Nebula Glow (Warna orange di belakang kaca) */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-200 h-150 bg-orange-600/10 blur-[100px] rounded-full pointer-events-none z-0" />
+
+
+      {/* =========================================================
+          MAIN COMPONENT: ULTRA CLEAR GLASS CARD
+         ========================================================= */}
+      <div className="w-full max-w-7xl px-4 mx-auto relative z-20">
         
-        {/* Header Section */}
-        <div className="text-center mb-10">
-          <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-2 inline-block relative text-white">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-orange-500 via-white to-orange-500 animate-gradient-text bg-300% underline decoration-[#ff5c00] decoration-4 underline-offset-8">
-              Server
-            </span>{" "}
-            About
-          </h2>
-          <p className="text-white/60 text-lg mt-2 max-w-2xl mx-auto">
-            Discover the story behind GarudaPS and what makes our community special!
-          </p>
-        </div>
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8 }}
+          className="relative group"
+        >
+          {/* Outer Glow Animation (Border Cahaya Halus) */}
+          <div className="absolute -inset-px bg-linear-to-r from-orange-500/0 via-orange-500/20 to-purple-500/0 rounded-4xl blur-md opacity-30 group-hover:opacity-60 transition duration-1000" />
 
-        {/* Grid Layout */}
-        <div className="grid grid-cols-1 xl:grid-cols-[450px_1fr] gap-6 xl:gap-8 items-stretch">
-          
-          {/* --- LEFT COLUMN: IMAGE --- */}
-          <div className="relative group w-full xl:w-[450px] mx-auto h-full min-h-[320px]">
-            <div className="absolute -inset-1 bg-gradient-to-r from-[#ff5c00] to-[#ff9e00] rounded-[24px] blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+          {/* THE GLASS CARD (ULTRA TRANSPARENT VERSION) */}
+          {/* bg-gradient-to-br from-white/[0.02] -> Putihnya cuman 2%, sisanya transparan */}
+          {/* backdrop-blur-lg -> Blurnya ga terlalu tebal, jadi background 'tembus' */}
+          <div className="relative bg-linear-to-br from-white/2 via-transparent to-transparent backdrop-blur-md border border-white/5 rounded-[30px] overflow-hidden shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)]">
             
-            <div className="relative w-full h-full rounded-[24px] overflow-hidden border border-white/10 bg-[#111111]">
-              <Image
-                src="/images/logo/garudaps.jpg" 
-                alt="GarudaPS"
-                fill
-                className="object-cover transform group-hover:scale-105 transition-transform duration-700"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+            {/* Tech Decoration: Corner Brackets (Biar ga sepi) */}
+            <div className="absolute top-0 left-0 p-6 opacity-30">
+               <div className="w-4 h-4 border-t border-l border-white"></div>
             </div>
-          </div>
+            <div className="absolute bottom-0 right-0 p-6 opacity-30">
+               <div className="w-4 h-4 border-b border-r border-white"></div>
+            </div>
 
-          {/* --- RIGHT COLUMN: TEXT CARD --- */}
-          <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-6 md:p-10 rounded-[24px] relative shadow-2xl overflow-hidden group flex flex-col justify-center w-full">
-            
-            {/* Background Glow */}
-            <div className="absolute -top-40 -right-40 w-[400px] h-[400px] bg-orange-500/10 blur-[120px] rounded-full pointer-events-none" />
-
-            {/* HEADER CARD */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 border-b border-white/10 pb-4 relative z-10 gap-4">
-              <div className="flex-1">
-                <h3 className="text-2xl md:text-4xl font-black mb-1 bg-clip-text text-transparent bg-gradient-to-r from-orange-500 via-white to-orange-500 animate-gradient-text bg-300% tracking-tight">
-                  GarudaPS | Private Server
-                </h3>
-                <p className="text-white/40 text-xs font-mono tracking-[0.3em] uppercase pl-1">
-                  IREXUS COMMUNITY
-                </p>
-              </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 items-center">
               
-              <div className="w-16 h-16 md:w-20 md:h-20 relative shrink-0">
-                <Image 
-                  src="/images/logo/GARUDAPS2026.png" 
-                  alt="GarudaPS Logo" 
+              {/* --- LEFT: CONTENT --- */}
+              <div className="p-10 md:p-16 flex flex-col justify-center relative z-10">
+                
+                {/* Header */}
+                <div className="mb-8 relative">
+                  <span className="text-orange-500/80 text-xs font-mono tracking-[0.3em] uppercase mb-3 block">Server Economy: Stable</span>
+                  <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white drop-shadow-sm">
+                    About <span className="text-transparent bg-clip-text bg-linear-to-r from-orange-400 to-amber-200">GarudaPS</span>
+                  </h2>
+                </div>
+
+                {/* Narrative (GT Style) */}
+                <div className="space-y-6 text-lg text-white/80 leading-relaxed font-light text-justify">
+                  <p>
+                    <span className="text-white font-bold shadow-black drop-shadow-lg">Build. Farm. Trade.</span> GarudaPS brings the ultimate private server experience. We know what Growtopians want: stability, freedom, and a balanced economy.
+                  </p>
+                  <p>
+                     Forget about <strong className="text-orange-400">Rollbacks</strong> and Downtime. Our infrastructure is built to handle massive World Locks transactions, intense farming, and huge social events without a single lag spike.
+                  </p>
+                </div>
+
+                {/* Footer Tech Stats (Transparent Style) */}
+                <div className="mt-10 pt-6 border-t border-white/5 flex items-center justify-between gap-2">
+                   
+                   {/* Stat 1 */}
+                   <div className="px-4 py-2 rounded-lg bg-white/2 border border-white/5 flex flex-col items-center flex-1">
+                      <span className="text-[10px] text-white/40 uppercase tracking-widest font-semibold">Gems Rate</span>
+                      <span className="text-white font-mono font-bold text-lg">HIGH</span>
+                   </div>
+
+                   {/* Stat 2 */}
+                   <div className="px-4 py-2 rounded-lg bg-white/2 border border-white/5 flex flex-col items-center flex-1">
+                      <span className="text-[10px] text-white/40 uppercase tracking-widest font-semibold">Start Item</span>
+                      <span className="text-white font-mono font-bold text-lg">Free BGL</span>
+                   </div>
+
+                   {/* Stat 3 */}
+                   <div className="px-4 py-2 rounded-lg bg-white/2 border border-white/5 flex flex-col items-center flex-1">
+                      <span className="text-[10px] text-white/40 uppercase tracking-widest font-semibold">System</span>
+                      <span className="text-green-400 font-mono font-bold text-lg shadow-green-500/50 drop-shadow-[0_0_8px_rgba(74,222,128,0.5)]">ONLINE</span>
+                   </div>
+                </div>
+
+              </div>
+
+              {/* --- RIGHT: IMAGE PORTAL --- */}
+              <div className="relative h-112.5 lg:h-full min-h-125 w-full overflow-hidden group/image">
+                
+                {/* Image */}
+                <Image
+                  src="/images/logo/garudaps.jpg" 
+                  alt="GarudaPS World"
                   fill
-                  className="object-contain drop-shadow-[0_0_20px_rgba(255,92,0,0.3)]"
+                  className="object-cover opacity-90 group-hover/image:scale-105 group-hover/image:opacity-100 transition-all duration-1000 ease-out"
                 />
+
+                {/* Overlay Hitam Tipis (Biar ga terlalu terang gambarnya) */}
+                <div className="absolute inset-0 bg-black/20 pointer-events-none" />
+
+                {/* Fusion Gradients (Biar gambarnya nyatu halus sama background section) */}
+                {/* Gradient kiri ke kanan (hitam ke transparan) */}
+                <div className="absolute inset-0 bg-linear-to-r from-[#0a0a0a]/80 via-transparent to-transparent" />
+                {/* Gradient bawah ke atas */}
+                <div className="absolute inset-0 bg-linear-to-t from-[#0a0a0a] via-transparent to-transparent" />
+
+                {/* --- LOGO POJOK KANAN ATAS --- */}
+                <div className="absolute top-6 right-6 z-30 pointer-events-none">
+                   <div className="relative w-24 h-24 hover:scale-110 transition-transform duration-500">
+                      {/* Glow effect di belakang logo */}
+                      <div className="absolute inset-0 bg-orange-500 blur-[30px] opacity-50 animate-pulse"></div>
+                      <Image 
+                         src="/images/logo/GARUDAPS2026.png" 
+                         alt="Logo Hologram"
+                         fill
+                         className="object-contain drop-shadow-2xl relative z-10"
+                      />
+                   </div>
+                </div>
+
               </div>
-            </div>
 
-            {/* BODY TEXT */}
-            <div className="space-y-3 text-white/70 text-base leading-relaxed text-justify relative z-10">
-              <p className="font-bold text-lg md:text-xl bg-clip-text text-transparent bg-gradient-to-r from-orange-500 via-white to-orange-500 animate-gradient-text bg-300%">
-                Welcome to Garuda Private Server (GarudaPS)
-              </p>
-
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore modi, corrupti quaerat mollitia earum amet, reiciendis laborum blanditiis aperiam ipsum fugiat veniam at nihil alias recusandae. Qui possimus dolor, amet repellat asperiores debitis nam facere beatae recusandae, dolorem quos magnam.
-              </p>
-
-              <p>
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iusto nisi inventore fugiat ad, et dolore quasi quo distinctio! Dolor nihil blanditiis deleniti quasi repudiandae corporis cumque et aperiam facilis placeat omnis minus quis, excepturi perspiciatis magni quia nemo ipsa praesentium nesciunt! Delectus id dolorem excepturi?
-              </p>
-              
-              <p>
-               Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure optio magnam animi quae excepturi beatae tempore, quis ipsa nemo? Nisi, reiciendis odit totam unde amet quibusdam est doloremque, recusandae error, non dolore dolor debitis aut?
-              </p>
-
-              <div className="pt-4 border-t border-white/5 mt-2 flex items-center gap-3">
-                 <span className="relative flex h-3 w-3">
-                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-                   <span className="relative inline-flex rounded-full h-3 w-3 bg-orange-500"></span>
-                 </span>
-                 <p className="text-white/40 text-sm italic">
-                    Join us and create your own legacy.
-                 </p>
-              </div>
             </div>
           </div>
+        </motion.div>
 
-        </div>
       </div>
     </section>
   )

@@ -26,6 +26,7 @@ export default function FloatingGhosts() {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true)
     const newGhosts: Ghost[] = Array.from({ length: GHOST_COUNT }).map((_, i) => {
       return {
@@ -47,7 +48,7 @@ export default function FloatingGhosts() {
   if (!mounted) return null
 
   return (
-    <div className="fixed inset-0 z-[1] overflow-hidden pointer-events-none select-none">
+    <div className="fixed inset-0 z-1 overflow-hidden pointer-events-none select-none">
       {ghosts.map((ghost) => (
         <motion.div
           key={ghost.id}

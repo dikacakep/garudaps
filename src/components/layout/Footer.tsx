@@ -8,9 +8,9 @@ export default function Footer() {
     <footer className="relative bg-[#050505] pt-16 pb-8 overflow-hidden">
       
       {/* --- BACKGROUND EFFECTS --- */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px] z-0 pointer-events-none" />
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-orange-500/50 to-transparent shadow-[0_0_15px_rgba(249,115,22,0.6)] z-10" />
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-orange-600/10 blur-[120px] rounded-full pointer-events-none z-0" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-size-[24px_24px] z-0 pointer-events-none" />
+      <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-orange-500/50 to-transparent shadow-[0_0_15px_rgba(249,115,22,0.6)] z-10" />
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-150 h-75 bg-orange-600/10 blur-[120px] rounded-full pointer-events-none z-0" />
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="flex flex-col items-center text-center">
@@ -26,7 +26,7 @@ export default function Footer() {
           </div>
 
           <h3 className="text-2xl font-black uppercase tracking-[0.2em] mb-8 relative inline-block">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-orange-500 via-white to-orange-500 animate-gradient-text bg-300%">
+            <span className="bg-clip-text text-transparent bg-linear-to-r from-orange-500 via-white to-orange-500 animate-gradient-text bg-300%">
               Garuda
             </span>{" "}
             <span className="text-white">PS</span>
@@ -50,7 +50,7 @@ export default function Footer() {
             </Link>
           </div>
 
-          <div className="w-24 h-1 bg-gradient-to-r from-transparent via-orange-500/30 to-transparent rounded-full mb-6" />
+          <div className="w-24 h-1 bg-linear-to-r from-transparent via-orange-500/30 to-transparent rounded-full mb-6" />
 
           {/* TEXT COPYRIGHT */}
           <div className="space-y-1">

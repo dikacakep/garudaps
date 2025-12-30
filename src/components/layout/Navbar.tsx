@@ -1,17 +1,20 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { X } from "lucide-react"
+import { X, Menu } from "lucide-react"
 import Image from "next/image"
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
   const [activeSection, setActiveSection] = useState("home")
-  
-  // STATE BARU: Untuk mengatur kapan logo muncul
   const [showLogo, setShowLogo] = useState(false)
+  
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const [hoverStyle, setHoverStyle] = useState({})
+  const navRef = useRef<HTMLDivElement>(null)
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const navItems = ["Home", "Tutorial", "Features", "About", "Community", "Teams"]
 
   const scrollToSection = (sectionId: string) => {
@@ -27,12 +30,8 @@ export default function Navbar() {
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY
-      
-      // LOGIC LOGO POP-UP:
-      // Jika scroll > 50px, tampilkan logo. Jika tidak, sembunyikan.
-      setShowLogo(scrollY > 50)
+      setShowLogo(scrollY > 50) 
 
-      // Logic Active Section (Navlink menyala)
       const scrollPosition = window.scrollY + 150
       for (const item of navItems) {
         const sectionId = item.toLowerCase()
@@ -45,7 +44,6 @@ export default function Navbar() {
         }
       }
     }
-
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [navItems])
@@ -58,32 +56,39 @@ export default function Navbar() {
     }
   }, [open])
 
+  const handleMouseEnter = (index: number, e: React.MouseEvent<HTMLButtonElement>) => {
+    setHoveredIndex(index)
+    const target = e.currentTarget
+    setHoverStyle({
+      width: target.offsetWidth,
+      left: target.offsetLeft,
+    })
+  }
+
+  const handleMouseLeave = () => {
+    setHoveredIndex(null)
+  }
+
   return (
     <>
-      <div className="fixed top-0 left-0 w-full z-[110] px-4 md:px-8 py-6 transition-all duration-300 pointer-events-none">
+      <div className="fixed top-0 left-0 w-full z-110 px-6 py-4 transition-all duration-300 pointer-events-none">
         
-        <div className="w-full max-w-7xl mx-auto flex justify-between items-center relative pointer-events-auto">
+        {/* CONTAINER MAIN*/}
+        <div className="w-full max-w-350 mx-auto flex justify-between items-center relative pointer-events-auto">
           
-          {/* --- LOGO SECTION (ANIMASI POP) --- */}
-          <div className="flex items-center z-[120] min-w-[100px] h-[50px]"> 
-             {/* Min-width/height menjaga agar layout tidak bergeser saat logo hilang */}
-             
+          {/* --- LOGO  --- */}
+          <div className="flex items-center z-120 min-w-30 h-12.5"> 
              <AnimatePresence>
                {showLogo && (
                  <motion.button 
-                    // ANIMASI POP DI SINI
-                    initial={{ scale: 0, opacity: 0 }} // Awal: Kecil & Transparan
-                    animate={{ scale: 1, opacity: 1 }} // Masuk: Ukuran Normal
-                    exit={{ scale: 0, opacity: 0 }}    // Keluar: Mengecil lagi
-                    transition={{ 
-                      type: "spring", 
-                      stiffness: 260, 
-                      damping: 20 
-                    }}
+                    initial={{ y: -50, opacity: 0 }} 
+                    animate={{ y: 0, opacity: 1 }} 
+                    exit={{ y: -50, opacity: 0 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
                     onClick={() => scrollToSection("home")} 
                     className="block relative group cursor-pointer"
                  >
-                    <div className="relative w-40 h-12 md:w-48 md:h-14 transition-transform group-hover:scale-105 duration-300">
+                    <div className="relative w-36 h-10 md:w-44 md:h-12 transition-transform group-hover:scale-105 duration-300">
                       <Image
                         src="/images/logo/GARUDAPS2026.png"
                         alt="GarudaPS Logo"
@@ -97,44 +102,62 @@ export default function Navbar() {
              </AnimatePresence>
           </div>
 
-          {/* --- DESKTOP NAV LINKS (CENTER) --- */}
-          <div className="hidden lg:flex absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[115]">
-            <div className="flex items-center gap-1 bg-white/5 border border-white/10 rounded-full px-2 py-2 shadow-2xl backdrop-blur-xl">
-              {navItems.map((item) => {
+          {/* --- DESKTOP NAV LINKS  --- */}
+          <div className="hidden lg:flex items-center">
+            <div 
+                ref={navRef}
+                className="relative flex items-center gap-1 bg-black/40 border border-white/5 rounded-full px-2 py-1.5 shadow-2xl backdrop-blur-md"
+                onMouseLeave={handleMouseLeave}
+            >
+              <div 
+                 className="absolute top-1.5 bottom-1.5 bg-white/10 rounded-full transition-all duration-300 ease-out z-0 pointer-events-none"
+                 style={{ 
+                    ...hoverStyle, 
+                    opacity: hoveredIndex !== null ? 1 : 0 
+                 }}
+              />
+
+              {navItems.map((item, index) => {
                 const isActive = activeSection === item.toLowerCase()
+                
                 return (
                   <button
                     key={item}
                     onClick={() => scrollToSection(item.toLowerCase())}
-                    className={`px-6 py-2 rounded-full text-sm font-bold transition-all duration-300 relative overflow-hidden ${
-                      isActive
-                        ? "bg-gradient-to-r from-orange-500 to-yellow-500 text-white shadow-lg shadow-orange-500/20 scale-105"
-                        : "text-white/70 hover:text-white hover:bg-white/5"
-                    }`}
+                    onMouseEnter={(e) => handleMouseEnter(index, e)}
+                    className={`
+                        relative z-10 px-5 py-2 rounded-full text-sm font-medium transition-colors duration-300
+                        ${isActive ? "text-white font-bold" : "text-white/60 hover:text-white"}
+                    `}
                   >
-                    <span className="relative z-10">{item}</span>
+                    {item}
+                    
+                    {isActive && (
+                        <motion.div 
+                            layoutId="activeDot"
+                            className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-orange-500 rounded-full shadow-[0_0_10px_#f97316]"
+                        />
+                    )}
                   </button>
                 )
               })}
             </div>
           </div>
 
-          {/* --- MOBILE HAMBURGER (KANAN) --- */}
-          <div className="lg:hidden flex justify-end z-[120]">
+          {/* --- MOBILE HAMBURGER --- */}
+          <div className="lg:hidden flex justify-end z-120">
             <button
-              className="w-12 h-12 rounded-full bg-white/10 border border-white/20 flex flex-col justify-center items-center gap-1.5 active:scale-95 transition-transform backdrop-blur-md hover:bg-white/20 cursor-pointer"
+              className="w-10 h-10 rounded-full bg-black/40 border border-white/10 flex items-center justify-center active:scale-95 transition-transform backdrop-blur-md text-white hover:bg-white/10"
               onClick={() => setOpen(true)}
               aria-label="Open menu"
             >
-              <div className="h-0.5 w-6 bg-white rounded-full" />
-              <div className="h-0.5 w-6 bg-white rounded-full" />
-              <div className="h-0.5 w-6 bg-white rounded-full" />
+              <Menu className="w-5 h-5" />
             </button>
           </div>
         </div>
       </div>
 
-      {/* --- MOBILE MENU OVERLAY --- */}
+      {/* --- MOBILE MENU OVERLAY (TETAP SAMA SEPERTI SEBELUMNYA) --- */}
       <AnimatePresence>
         {open && (
           <>
@@ -155,7 +178,7 @@ export default function Navbar() {
             >
               <div className="flex flex-col min-h-full">
                 
-                {/* Header Mobile: LOGO DISINI SELALU MUNCUL (Tidak ikut logic scroll) */}
+                {/* Header Mobile */}
                 <div className="flex justify-between items-center p-6 border-b border-white/10">
                   <div className="relative w-32 h-10">
                     <Image
@@ -173,6 +196,7 @@ export default function Navbar() {
                   </button>
                 </div>
 
+                {/* List Menu Mobile */}
                 <div className="flex-1 flex flex-col justify-center p-6 gap-4">
                   {navItems.map((item, index) => (
                     <motion.div

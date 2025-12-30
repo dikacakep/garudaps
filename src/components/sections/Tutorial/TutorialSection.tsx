@@ -1,242 +1,277 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
-import type React from "react"
+import { Monitor, Smartphone, Apple, Command, Download, Copy, Check, LucideIcon } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
-// --- TUTORIAL CARD ---
-const TutorialCard = ({ title, imageSrc, steps }: { title: string; imageSrc: string; steps: React.ReactNode[] }) => (
-  <motion.div
-    suppressHydrationWarning={true}
-    
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
-    className="relative overflow-hidden group
-               bg-white/5 
-               backdrop-blur-md 
-               border border-white/10 
-               rounded-[32px] 
-               p-8 md:p-10 
-               shadow-[0_8px_32px_0_rgba(0,0,0,0.36)]
-               hover:border-orange-500/30 
-               hover:bg-white/[0.07]
-               transition-all duration-300"
-  >
-    <div className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] bg-gradient-to-br from-white/[0.05] via-transparent to-transparent rotate-12 pointer-events-none blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+interface TutorialStep {
+  text: string;
+  code?: string;       
+  isMultiLine?: boolean;
+  link?: string;
+  isDownload?: boolean;
+}
 
-    {/* Header Card (Icon & Title) */}
-    <div className="relative z-10 flex items-center gap-5 mb-8 border-b border-white/5 pb-6">
-      <div className="bg-white/5 border border-white/10 p-3 rounded-2xl group-hover:scale-110 group-hover:border-orange-500/30 transition-all duration-300 relative w-16 h-16 flex items-center justify-center shadow-lg">
-        <div className="relative w-10 h-10">
-          <Image 
-            src={imageSrc} 
-            alt={title} 
-            fill 
-            className="object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]" 
-          />
-        </div>
-      </div>
-      <h3 className="text-2xl font-black text-white group-hover:text-orange-500 transition-colors italic tracking-tight uppercase drop-shadow-md">
-        {title}
-      </h3>
-    </div>
+interface TutorialItem {
+  id: string;
+  label: string;
+  icon: LucideIcon;
+  color: string;
+  imageSrc: string;
+  steps: TutorialStep[];
+}
 
-    {/* Steps List */}
-    <ul className="relative z-10 space-y-4 text-left">
-      {steps.map((step, i) => (
-        <li key={i} className="flex gap-4 text-white/80 leading-relaxed font-medium">
-          <span className="flex items-center justify-center w-6 h-6 rounded-full bg-orange-500/20 text-orange-500 text-xs font-bold shrink-0 mt-0.5 border border-orange-500/30">
-            {i + 1}
-          </span>
-          <div className="flex-1 text-sm md:text-base">{step}</div>
-        </li>
-      ))}
-    </ul>
-  </motion.div>
-)
+const TUTORIAL_DATA: TutorialItem[] = [
+  {
+    id: "windows",
+    label: "Windows",
+    icon: Monitor,
+    color: "text-blue-400",
+    imageSrc: "/images/icons/win.png",
+    steps: [
+      { text: "Press Win+R → Type this path:", code: "C:\\Windows\\System32\\drivers\\etc" },
+      { text: "Right click 'hosts' file → Open with Notepad (Run as Admin)." },
+      { text: "Paste these lines at the very bottom:", code: "157.66.54.50 www.growtopia1.com\n157.66.54.50 www.growtopia2.com", isMultiLine: true },
+      { text: "Save the file (Ctrl+S) → Launch Growtopia." }
+    ]
+  },
+  {
+    id: "android-pt",
+    label: "PowerTunnel",
+    icon: Smartphone,
+    color: "text-green-400",
+    imageSrc: "/images/icons/ptun.png",
+    steps: [
+      { text: "Download PowerTunnel APK", link: "https://android.izzysoft.de/repo/apk/io.github.krlvm.powertunnel.android" },
+      { text: "Open App → Menu (Plugin) → Hosts → Settings (Gear Icon)." },
+      { text: "Enter this URL in the box:", code: "https://garudaps.vercel.app/android" },
+      { text: "Go Back → Click 'CONNECT' button → Open Growtopia." }
+    ]
+  },
+  {
+    id: "android-hostsgo",
+    label: "Hosts Go",
+    icon: Smartphone,
+    color: "text-teal-400",
+    imageSrc: "/images/icons/hostsgo.png",
+    steps: [
+      { text: "Download Hosts Go (No Root)", link: "https://www.mediafire.com/file/ctly08te3i8rlwq" },
+      { text: "Open App → Hosts Editor → Enable Switch → Download Hosts File." },
+      { text: "Enter this URL:", code: "https://garudaps.vercel.app/android" },
+      { text: "Apply → Start Protection (VPN) → Open Growtopia." }
+    ]
+  },
+  {
+    id: "android-virtual",
+    label: "Virtual Host",
+    icon: Smartphone,
+    color: "text-purple-400",
+    imageSrc: "/images/icons/virtual.png",
+    steps: [
+      { text: "Download Virtual Host APK", link: "https://www.apkshub.com/app/com.github.xfalcon.vhosts", isDownload: false },
+      { text: "Download our Hosts File", link: "#", isDownload: true },
+      { text: "Open App → Click 'SELECT HOSTS FILE'." }, 
+      { text: "Select the file you just downloaded → Turn ON (Green)." }
+    ]
+  },
+  {
+    id: "ios-surge",
+    label: "Surge 5 (iOS)",
+    icon: Apple,
+    color: "text-gray-200",
+    imageSrc: "/images/icons/surge.png",
+    steps: [
+      { text: "Install Surge 5 from App Store", link: "https://apps.apple.com/us/app/surge-5/id1442620678" },
+      { text: "Open App → Import Profile via URL.", code: "https://garudaps.vercel.app/ios" },
+      { text: "Allow VPN Configuration → Tap 'Start' → Open Growtopia." }
+    ]
+  },
+  {
+    id: "mac",
+    label: "MacOS",
+    icon: Command,
+    color: "text-white",
+    imageSrc: "/images/icons/mac.png",
+    steps: [
+      { text: "Finder → Go → Go to Folder → Type:", code: "/private/etc/hosts" },
+      { text: "Copy 'hosts' to Desktop → Add lines:", code: "157.66.54.50 www.growtopia1.com\n157.66.54.50 www.growtopia2.com", isMultiLine: true },
+      { text: "Save → Drag back to folder → Authenticate." }
+    ]
+  }
+]
 
-export default function TutorialSection() {
- const tutorials = [
-    {
-      title: "Windows",
-      imageSrc: "/images/icons/win.png", 
-      steps: [
-        <span key="press-win-r">Press Win+R → paste <code className="bg-black/30 px-1 rounded text-orange-400">C:\Windows\System32\drivers\etc</code></span>,
-        <span key="open-hosts-with-notepad">
-          Open <span className="font-bold text-white">hosts</span> with Notepad (Run as Admin)
-        </span>,
-        <span key="add-hosts">
-          Add the following lines at the bottom: <br />
-          <code className="text-orange-400 mt-3 block font-mono bg-black/40 p-4 rounded-xl border border-white/10 text-xs md:text-sm select-all">
-            157.66.54.50 growtopia1.com
-            <br />
-            157.66.54.50 growtopia2.com
-            <br />
-            157.66.54.50 www.growtopia1.com
-            <br />
-            157.66.54.50 www.growtopia2.com
-          </code>
-        </span>,
-        "Save the file → Launch Growtopia",
-      ],
-    },
-    {
-      title: "PowerTunnel (Android)",
-      imageSrc: "/images/icons/ptun.png", 
-      steps: [
-        <span key="install-power-tunnel">
-          Install{" "}
-          <a 
-            href="https://android.izzysoft.de/repo/apk/io.github.krlvm.powertunnel.android" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="text-orange-500 font-bold underline hover:text-orange-400 transition-colors"
-          >
-            PowerTunnel APK
-          </a>
-        </span>,
-        "Open App → Menu (Plugin) → Hosts → Settings (Gear Icon)",
-        <span key="enter-url-power-tunnel">
-          Enter URL: <br/>
-          <span className="text-orange-400 font-mono text-sm bg-black/30 px-2 py-1 rounded block mt-1 w-fit">https://garudaps.vercel.app/android</span>
-        </span>,
-        'Go Back → Click "CONNECT" button → Open Growtopia',
-      ],
-    },
-    {
-      title: "Hosts Go (Android)",
-      imageSrc: "/images/icons/hostsgo.png", 
-      steps: [
-        <span key="install-hosts-go">
-          Install{" "}
-          <a 
-            href="https://www.mediafire.com/file/ctly08te3i8rlwq/%28No_root%29_Hosts_Go_2.1.9_Apkpure.apk/file" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="text-orange-500 font-bold underline hover:text-orange-400 transition-colors"
-          >
-            Hosts Go (No Root)
-          </a>
-        </span>,
-        "Open App → Hosts Editor → Enable Switch → Download Hosts File",
-        <span key="enter-url-hosts-go">
-          Enter URL: <br/>
-          <span className="text-orange-400 font-mono text-sm bg-black/30 px-2 py-1 rounded block mt-1 w-fit">https://garudaps.vercel.app/android</span>
-        </span>,
-        "Apply → Start Protection (VPN) → Open Growtopia",
-      ],
-    },
-    {
-      title: "Virtual Host (Android)",
-      imageSrc: "/images/icons/virtual.png", 
-      steps: [
-        <span key="install-virtual-host">
-          Install{" "}
-          <a 
-            href="https://www.apkshub.com/app/com.github.xfalcon.vhosts" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="text-orange-500 font-bold underline hover:text-orange-400 transition-colors"
-          >
-            Virtual Host APK
-          </a>
-        </span>,
-        <span key="download-hosts-file">
-          Download Hosts File{" "}
-          <a 
-            href="#" 
-            download
-            className="text-orange-500 font-bold underline hover:text-orange-400 transition-colors"
-          >
-            here
-          </a>
-        </span>,
-        "Open App → Click 'SELECT HOSTS FILE'",
-        "Select the downloaded file",
-        "Turn ON (Green) → Open Growtopia",
-      ],
-    },
-    {
-      title: "Mac",
-      imageSrc: "/images/icons/mac.png", 
-      steps: [
-        <span key="finder">
-          Open Finder → Go → Go to Folder → Type <code className="bg-black/30 px-1 rounded text-orange-400">/private/etc/hosts</code>
-        </span>,
-        <span key="add-hosts">
-          Copy 'hosts' file to Desktop → Edit → Add lines: <br />
-          <code className="text-orange-400 mt-3 block font-mono bg-black/40 p-4 rounded-xl border border-white/10 text-xs md:text-sm select-all">
-            157.66.54.50 growtopia1.com
-            <br />
-            157.66.54.50 growtopia2.com
-            <br />
-            157.66.54.50 www.growtopia1.com
-            <br />
-            157.66.54.50 www.growtopia2.com
-          </code>
-        </span>,
-        "Save → Drag back to /private/etc/ → Authenticate → Done",
-      ],
-    },
-    {
-      title: "Surge 5 (iOS)",
-      imageSrc: "/images/icons/surge.png", 
-      steps: [
-        <span key="install-surge5">
-          Install{" "}
-          <a 
-            href="https://apps.apple.com/us/app/surge-5/id1442620678" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="text-orange-500 font-bold underline hover:text-orange-400 transition-colors"
-          >
-            Surge 5
-          </a>{" "}
-          from App Store
-        </span>,
-        <span key="download-hosts-file">
-          Open App → Import Profile via URL: <br/>
-          <span className="text-orange-400 font-mono text-sm bg-black/30 px-2 py-1 rounded block mt-1 w-fit">https://garudaps.vercel.app/ios</span>
-        </span>,
-        "Allow VPN Configuration → Tap 'Start' → Open Growtopia",
-      ],
-    },
-  ]
+const CodeSnippet = ({ code, isMultiLine }: { code: string, isMultiLine?: boolean }) => {
+  const [copied, setCopied] = useState(false)
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(code)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
 
   return (
-    <section id="tutorial" className="relative py-32 overflow-hidden bg-[#0a0a0a]">
-      {/* Background Gradient Overlays */}
-      <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-[#0a0a0a] z-20 pointer-events-none -translate-y-full" />
-      <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#0a0a0a] to-transparent z-20 pointer-events-none" />
+    <div className="relative group mt-2">
+      <div className={`
+        bg-black/50 border border-white/10 rounded-lg p-3 font-mono text-sm text-orange-400/90 shadow-inner backdrop-blur-sm
+        ${isMultiLine ? "whitespace-pre-line leading-relaxed" : "whitespace-nowrap overflow-x-auto"}
+      `}>
+        {code}
+      </div>
+      <button 
+        onClick={handleCopy}
+        className="absolute top-2 right-2 p-1.5 rounded-md bg-white/10 hover:bg-white/20 text-white transition-colors opacity-0 group-hover:opacity-100 backdrop-blur-sm"
+        title="Copy"
+      >
+        {copied ? <Check className="w-3 h-3 text-green-400" /> : <Copy className="w-3 h-3" />}
+      </button>
+    </div>
+  )
+}
 
-      {/* Background Glow Decoration */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-orange-500/5 blur-[120px] rounded-full pointer-events-none" />
+export default function TutorialSection() {
+  const [activeTab, setActiveTab] = useState("windows")
+  const activeContent = TUTORIAL_DATA.find(t => t.id === activeTab) || TUTORIAL_DATA[0]
+
+  return (
+    <section id="tutorial" className="relative py-24 bg-[#0a0a0a] overflow-hidden">
+      
+      {/* --- BACKGROUND --- */}
+      <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute inset-0 bg-[url('/images/grid-pattern.png')] opacity-[0.05]" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-200 h-200 bg-orange-600/10 blur-[150px] rounded-full" />
+      </div>
+
+      <div className="absolute top-0 left-0 w-full h-40 bg-linear-to-b from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-full h-40 bg-linear-to-t from-black to-transparent z-10 pointer-events-none" />
 
       <div className="container relative z-10 px-4 mx-auto">
-        <div className="text-center mb-20">
-          <motion.h2
+        
+        {/* SECTION TITLE */}
+        <div className="text-center mb-16 relative">
+          <motion.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-7xl font-black uppercase tracking-tighter inline-block relative text-white"
+            className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter"
           >
-            <span className="animate-gradient-text">How to Play</span>
-            <div className="absolute -bottom-4 left-0 w-full h-1.5 bg-orange-500 rounded-full shadow-[0_0_20px_rgba(255,92,0,0.6)]" />
+            How To <span className="animate-gradient-text border-b-4 border-orange-500 pb-1">Play</span>
           </motion.h2>
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="text-white/60 text-lg md:text-xl font-medium mt-10 tracking-wide max-w-2xl mx-auto"
-          >
-            Select your platform below and follow the simple steps to join the world of GarudaPS!
-          </motion.p>
+          <p className="text-white/40 mt-8 max-w-xl mx-auto">
+            Select your device below to access the secure connection gateway.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 max-w-7xl mx-auto">
-          {tutorials.map((tutorial, idx) => (
-            <TutorialCard key={idx} {...tutorial} />
-          ))}
+        <div className="max-w-5xl mx-auto">
+          
+          {/* TAB BUTTONS */}
+          <div className="flex flex-wrap md:flex-nowrap justify-center gap-2 mb-8 p-2 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm relative z-20">
+            {TUTORIAL_DATA.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`
+                  relative px-4 py-3 rounded-xl flex items-center gap-2 transition-all duration-300
+                  ${activeTab === tab.id ? "bg-orange-600 text-white shadow-lg shadow-orange-500/20" : "hover:bg-white/5 text-white/50 hover:text-white"}
+                `}
+              >
+                <tab.icon className={`w-4 h-4 ${activeTab === tab.id ? "text-white" : tab.color}`} />
+                <span className="text-sm font-bold whitespace-nowrap">{tab.label}</span>
+                
+                {activeTab === tab.id && (
+                  <motion.div 
+                    layoutId="activeTabDot"
+                    className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full"
+                  />
+                )}
+              </button>
+            ))}
+          </div>
+
+          {/* CONTENT CARD */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 15, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -15, scale: 0.98 }}
+              transition={{ duration: 0.3 }}
+              className="relative overflow-hidden rounded-[30px] border border-white/5 shadow-2xl backdrop-blur-xl bg-black/20"
+            >
+              <div className="absolute inset-0 opacity-[0.04] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none mix-blend-overlay" />
+
+              <div className="h-10 bg-white/5 border-b border-white/5 flex items-center px-6 gap-2 backdrop-blur-md relative z-10">
+                 <div className="flex gap-1.5">
+                    <div className="w-3 h-3 rounded-full bg-red-500/40" />
+                    <div className="w-3 h-3 rounded-full bg-yellow-500/40" />
+                    <div className="w-3 h-3 rounded-full bg-green-500/40" />
+                 </div>
+                 <div className="ml-4 text-[10px] font-mono text-white/20 uppercase tracking-widest hidden md:block">
+                    GarudaPS_Protocol // {activeContent.label}
+                 </div>
+              </div>
+
+              <div className="p-6 md:p-10 grid grid-cols-1 lg:grid-cols-3 gap-10 relative z-10">
+                <div className="flex flex-col items-center justify-center lg:border-r border-white/5 pr-0 lg:pr-10">
+                   <div className="relative w-32 h-32 mb-6">
+                      <div className="absolute inset-0 bg-orange-500/20 blur-2xl rounded-full animate-pulse" />
+                      <Image 
+                        src={activeContent.imageSrc} 
+                        alt={activeContent.label} 
+                        fill 
+                        className="object-contain relative z-10 drop-shadow-2xl"
+                      />
+                   </div>
+                   <h3 className="text-2xl font-black text-white uppercase italic tracking-tighter drop-shadow-lg">
+                      {activeContent.label}
+                   </h3>
+                   <div className="mt-2 px-3 py-1 bg-green-500/10 border border-green-500/20 rounded-full text-[10px] font-bold text-green-400 uppercase tracking-widest backdrop-blur-md">
+                      Status: Compatible
+                   </div>
+                </div>
+
+                <div className="lg:col-span-2 space-y-6">
+                   {activeContent.steps.map((step, idx) => (
+                      <motion.div 
+                        key={idx}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: idx * 0.1 }}
+                        className="flex gap-4 group"
+                      >
+                         <div className="shrink-0 w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-orange-500 font-mono font-bold text-sm group-hover:bg-orange-500 group-hover:text-white transition-colors shadow-lg">
+                            {idx + 1}
+                         </div>
+                         <div className="flex-1">
+                            <p className="text-white/80 text-sm md:text-base font-medium leading-relaxed drop-shadow-md">
+                              {step.text}
+                            </p>
+                            
+                            {step.code && (
+                              <CodeSnippet code={step.code} isMultiLine={step.isMultiLine} />
+                            )}
+                            
+                            {step.link && (
+                               <Button 
+                                 variant="outline" 
+                                 size="sm" 
+                                 className="mt-3 border-orange-500/30 bg-orange-500/5 text-orange-400 hover:bg-orange-500 hover:text-white transition-all backdrop-blur-sm"
+                                 onClick={() => window.open(step.link, "_blank")}
+                               >
+                                 <Download className="w-4 h-4 mr-2" />
+                                 {step.isDownload ? "Download File" : "Download App"}
+                               </Button>
+                            )}
+                         </div>
+                      </motion.div>
+                   ))}
+                </div>
+              </div>
+              
+              <div className="absolute bottom-0 left-0 w-full h-px bg-linear-to-r from-transparent via-orange-500/30 to-transparent" />
+            </motion.div>
+          </AnimatePresence>
+
         </div>
       </div>
     </section>

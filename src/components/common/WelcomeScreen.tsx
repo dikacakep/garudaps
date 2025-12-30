@@ -1,97 +1,191 @@
 "use client"
 
 import { useState, useRef } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import Image from "next/image"
+import { Headphones, ArrowRight, Zap } from "lucide-react"
 
 export default function WelcomeScreen() {
-  // State untuk mengontrol apakah popup masih muncul atau sudah di-close
-  const [showModal, setShowModal] = useState(true)
+  const [isOpening, setIsOpening] = useState(false)
+  const [isHidden, setIsHidden] = useState(false)
   
-  // Ref untuk audio element
   const audioRef = useRef<HTMLAudioElement | null>(null)
 
   const handleEnter = () => {
-    // 1. Putar lagu saat tombol diklik
     if (audioRef.current) {
-      audioRef.current.volume = 0.5 // Set volume 50%
-      audioRef.current.play().catch((err) => {
-        console.error("Audio playback failed:", err)
-      })
+      audioRef.current.volume = 0.5 
+      audioRef.current.play().catch((err) => console.error("Audio error:", err))
     }
     
-    // 2. Hilangkan modal dengan animasi
-    setShowModal(false)
+    setIsOpening(true)
+
+    setTimeout(() => {
+      setIsHidden(true)
+    }, 1600) 
+  }
+
+  const curtainTransition = {
+    duration: 1.5, 
+    ease: [0.76, 0, 0.24, 1] as const
   }
 
   return (
     <>
-      {/* --- AUDIO ELEMENT (Tersembunyi) --- */}
       <audio ref={audioRef} loop>
         <source src="/audio/bgm.mp3" type="audio/mpeg" />
       </audio>
 
-      {/* --- MODAL POPUP --- */}
-      <AnimatePresence>
-        {showModal && (
-          <motion.div
-            className="fixed inset-0 z-9999 flex items-center justify-center px-4"
-            exit={{ opacity: 0, transition: { duration: 0.8, ease: "easeInOut" } }}
-          >
-            {/* 1. Background Gelap / Blur di belakang modal */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-black/90 backdrop-blur-xl"
-            />
+      {/* CONTAINER  */}
+      <div className={`fixed inset-0 flex items-center justify-center overflow-hidden transition-all duration-300 ${isHidden ? "z-[-1] pointer-events-none opacity-0" : "z-9999 opacity-100"}`}>
+        
+        {/* --- LEFT CURTAIN --- */}
+        <motion.div
+          initial={{ x: "0%" }}
+          animate={{ x: isOpening ? "-100%" : "0%" }}
+          transition={curtainTransition}
+          className="absolute top-0 left-0 w-1/2 h-full bg-[#050505] z-20 overflow-hidden border-r border-white/5 will-change-transform"
+        >
+          <div className="absolute inset-0 bg-linear-to-b from-[#0a0a0a] via-[#111] to-[#050505]" />
+          {/* Cyber Grid Floor */}
+          <div 
+            className="absolute bottom-0 left-0 w-full h-1/2 opacity-30 pointer-events-none"
+            style={{
+                backgroundImage: `linear-gradient(to right, #ea580c 1px, transparent 1px), linear-gradient(to bottom, #ea580c 1px, transparent 1px)`,
+                backgroundSize: '50px 50px',
+                transform: 'perspective(500px) rotateX(60deg) translateY(100px) translateZ(-100px)',
+                maskImage: 'linear-gradient(to top, black, transparent 80%)'
+            }} 
+          />
 
-            {/* 2. Card Modal Utama */}
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 1.1, opacity: 0 }}
-              transition={{ delay: 0.2, duration: 0.4 }}
-              className="relative z-10 w-full max-w-2xl bg-[#0a0a0a] border border-white/10 rounded-[40px] p-8 md:p-12 text-center shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden"
-            >
-              {/* Dekorasi Glow di dalam card */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-orange-500/10 blur-[80px] rounded-full pointer-events-none" />
+          {/* MASCOT KIRI */}
+          <div className="absolute -bottom-20 -left-20 w-125 h-125 opacity-40 mix-blend-screen pointer-events-none z-10">
+             <motion.div 
+                animate={{ y: [0, -20, 0] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                className="relative w-full h-full"
+             >
+                <Image 
+                    src="/images/set.png"
+                    alt="Guardian Left"
+                    fill
+                    priority 
+                    className="object-contain drop-shadow-[0_0_50px_rgba(234,88,12,0.3)]"
+                />
+             </motion.div>
+          </div>
 
-              {/* Logo */}
-              <div className="relative w-48 h-24 mx-auto mb-6">
+          <div className="absolute inset-0 bg-linear-to-r from-black via-transparent to-black/50 z-20" />
+        </motion.div>
+
+        {/* --- RIGHT CURTAIN --- */}
+        <motion.div
+          initial={{ x: "0%" }}
+          animate={{ x: isOpening ? "100%" : "0%" }}
+          transition={curtainTransition}
+          className="absolute top-0 right-0 w-1/2 h-full bg-[#050505] z-20 overflow-hidden border-l border-white/5 will-change-transform"
+        >
+          <div className="absolute inset-0 bg-linear-to-b from-[#0a0a0a] via-[#111] to-[#050505]" />
+          <div className="absolute inset-0 bg-[url('/images/banner.jpg')] bg-cover bg-right opacity-20 mix-blend-overlay grayscale" />
+
+           <div 
+            className="absolute bottom-0 right-0 w-full h-1/2 opacity-30 pointer-events-none"
+            style={{
+                backgroundImage: `linear-gradient(to right, #ea580c 1px, transparent 1px), linear-gradient(to bottom, #ea580c 1px, transparent 1px)`,
+                backgroundSize: '50px 50px',
+                transform: 'perspective(500px) rotateX(60deg) translateY(100px) translateZ(-100px)',
+                maskImage: 'linear-gradient(to top, black, transparent 80%)'
+            }} 
+          />
+
+          {/* MASCOT KANAN */}
+          <div className="absolute -top-20 -right-20 w-125 h-125 opacity-30 mix-blend-screen pointer-events-none z-10 transform scale-x-[-1]">
+             <motion.div 
+                animate={{ y: [0, 20, 0] }}
+                transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                className="relative w-full h-full"
+             >
                  <Image 
-                    src="/images/logo/GARUDAPS2026.png" 
-                    alt="GarudaPS Logo" 
-                    fill 
-                    className="object-contain drop-shadow-[0_0_20px_rgba(255,92,0,0.4)]"
-                 />
-              </div>
+                    src="/images/set.png" 
+                    alt="Guardian Right"
+                    fill
+                    priority
+                    className="object-contain drop-shadow-[0_0_50px_rgba(234,88,12,0.3)]"
+                />
+             </motion.div>
+          </div>
 
-              {/* Judul & Deskripsi */}
-              <h2 className="text-3xl md:text-4xl font-black text-white mb-4 uppercase tracking-tight">
-                Welcome to <span className="text-orange-500">GarudaPS</span>
-              </h2>
-              <p className="text-white/60 text-sm md:text-base leading-relaxed mb-10 max-w-lg mx-auto">
-                Discover exclusive features, meet incredible players from around the world, and dive into a community built for epic journeys.
-                <br /><br />
-                <span className="text-orange-400 font-bold text-xs uppercase tracking-widest">
-                  Ready? Press the button below to begin!
-                </span>
-              </p>
+          <div className="absolute inset-0 bg-linear-to-l from-black via-transparent to-black/50 z-20" />
+        </motion.div>
 
-              {/* Tombol Enter */}
-              <button
-                onClick={handleEnter}
-                className="group relative inline-flex items-center justify-center px-10 py-4 text-lg font-black text-white transition-all duration-200 bg-orange-600 rounded-2xl hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-600 shadow-[0_0_20px_rgba(249,115,22,0.4)] hover:shadow-[0_0_40px_rgba(249,115,22,0.6)] hover:-translate-y-1 active:scale-95"
-              >
-                <span>ENTER WORLD</span>
-                {/* Efek kilatan pada tombol */}
-                <div className="absolute inset-0 h-full w-full scale-0 rounded-2xl transition-all duration-300 group-hover:scale-100 group-hover:bg-white/10 pointer-events-none" />
-              </button>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        <motion.div
+          animate={{ 
+             opacity: isOpening ? 0 : 1, 
+             scale: isOpening ? 1.1 : 1, 
+          }}
+          transition={{ duration: 0.5 }} 
+          className="relative z-30 flex flex-col items-center justify-center w-full max-w-3xl px-6"
+        >
+          
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-175 h-125 bg-orange-600/10 blur-[100px] rounded-full pointer-events-none" />
+
+          {/* LOGO */}
+          <div className="relative w-80 h-40 mb-8 group cursor-default">
+             <Image 
+                src="/images/logo/GARUDAPS2026.png" 
+                alt="Logo" 
+                fill 
+                priority
+                className="object-contain drop-shadow-[0_0_40px_rgba(249,115,22,0.4)]"
+             />
+          </div>
+
+          {/* TEXT & TAGLINE */}
+          <div className="text-center space-y-5 mb-16">
+             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-orange-500/30 bg-orange-950/30 backdrop-blur-md shadow-[0_0_20px_rgba(249,115,22,0.2)]">
+                <Zap className="w-3 h-3 text-orange-400 fill-orange-400 animate-pulse" />
+                <span className="text-[10px] font-bold text-orange-200 tracking-[0.3em] uppercase">Immersive Private Server</span>
+             </div>
+             
+             {/* ANIMATED TEXT */}
+             <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter drop-shadow-2xl leading-none text-transparent bg-clip-text bg-linear-to-r from-orange-500 via-red-500 to-yellow-500 animate-gradient-text bg-300%">
+                GARUDAPS
+             </h1>
+             
+             <p className="text-white/60 font-medium text-sm md:text-lg tracking-wide max-w-lg mx-auto leading-relaxed">
+                Experience the pinnacle of GT private servers. <br />
+                Built for stability. Designed for glory.
+             </p>
+          </div>
+
+          {/* --- UTTON --- */}
+          <div className="relative group">
+            <div className="absolute -inset-1 bg-linear-to-r from-orange-600 to-red-600 rounded-2xl blur opacity-20 group-hover:opacity-60 transition duration-500 group-hover:duration-200 animate-pulse" />
+            
+            <button
+              onClick={handleEnter}
+              className="relative px-16 py-6 bg-black/60 backdrop-blur-xl border border-orange-500/30 text-orange-50 font-black text-xl uppercase tracking-widest rounded-2xl overflow-hidden transition-all duration-300 group-hover:border-orange-400 group-hover:shadow-[0_0_50px_rgba(249,115,22,0.4)] focus:outline-none active:scale-95"
+            >
+               <div className="absolute top-0 bottom-0 -left-full w-[50%] bg-linear-to-r from-transparent via-white/10 to-transparent skew-x-12 group-hover:animate-[shine_1s_ease-in-out_infinite]" />
+               <div className="absolute inset-0 bg-linear-to-r from-orange-500/20 via-red-500/20 to-orange-500/20 translate-y-full group-hover:translate-y-[0%] transition-transform duration-500 ease-out" />
+               
+               <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-orange-400 opacity-50" />
+               <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-orange-400 opacity-50" />
+
+               <span className="relative z-10 flex items-center gap-4 drop-shadow-md group-hover:text-white transition-colors">
+                 Initialize World 
+                 <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform duration-300 text-orange-400 group-hover:text-white" />
+               </span>
+            </button>
+          </div>
+
+          <div className="mt-12 flex items-center gap-3 text-white/30 text-[10px] font-mono">
+             <Headphones className="w-4 h-4 animate-bounce" />
+             <span>Audio Enhanced Experience (50%)</span>
+          </div>
+
+        </motion.div>
+
+      </div>
     </>
   )
 }
