@@ -19,23 +19,28 @@ export function ServerProvider({ children }: { children: React.ReactNode }) {
 
   const fetchStatus = async () => {
     try {
-      const response = await fetch("http://157.66.54.50:3001/api/status");
+      const response = await fetch("/api/proxy-status");
+      
+      if (!response.ok) throw new Error("Network response was not ok");
+      
       const data = await response.json();
+      
       setStatus({
         online: data.status === "online",
         players: data.players || 0,
         loading: false,
       });
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
+      console.error("Gagal sinkronisasi status server:", error);
       setStatus({ online: false, players: 0, loading: false });
     }
   };
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchStatus();
-    const interval = setInterval(fetchStatus, 1500); // Update tiap 20 detik
+
+    const interval = setInterval(fetchStatus, 15000); 
+    
     return () => clearInterval(interval);
   }, []);
 
@@ -46,9 +51,10 @@ export function ServerProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-// Hook buatan sendiri agar lebih mudah dipanggil di komponen lain
 export const useServer = () => {
   const context = useContext(ServerContext);
-  if (!context) throw new Error("useServer harus di dalam ServerProvider");
+  if (!context) {
+    throw new Error("useServer harus digunakan di dalam ServerProvider");
+  }
   return context;
 };
