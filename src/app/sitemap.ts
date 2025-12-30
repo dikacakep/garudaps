@@ -5,9 +5,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     {
       url: 'https://www.garudaps.com',
       lastModified: new Date(),
-      changeFrequency: 'weekly', 
-      priority: 1, 
+      changeFrequency: 'weekly',
+      priority: 1,
     },
-    // page baru bikin tambahan di sini
   ]
 }

@@ -8,7 +8,7 @@ import FloatingButtons from "@/components/effects/FloatingButtons";
 
 export default function Home() {
   return (
-    <main>
+    <>
       <Hero />
       <TutorialSection />
       <Features />
@@ -16,6 +16,6 @@ export default function Home() {
       <Community />
       <Teams />
       <FloatingButtons />
-    </main>
+    </>
   );
 }

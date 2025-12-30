@@ -139,7 +139,6 @@ export default function TutorialSection() {
       
       {/* --- BACKGROUND --- */}
       <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute inset-0 bg-[url('/images/grid-pattern.png')] opacity-[0.05]" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-200 h-200 bg-orange-600/10 blur-[150px] rounded-full" />
       </div>
 
