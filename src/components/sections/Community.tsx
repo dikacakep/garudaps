@@ -49,7 +49,7 @@ export default function Community() {
       Icon: Icons.tiktok,
       color: "#FE2C55",
       description: "Watch our latest trailers, funny moments, and sneak peeks of upcoming updates.",
-      link: "https://www.tiktok.com/@edgborn?_r=1&_t=ZS-92d8io49OrQ",
+      link: "https://www.tiktok.com/@irexusgtps",
     },
   }
 
@@ -231,7 +231,7 @@ export default function Community() {
                       </div>
                       
                       <div className="relative z-10">
-                         <h3 className="text-white font-bold text-3xl mb-1">@edgborn</h3>
+                         <h3 className="text-white font-bold text-3xl mb-1">@irexusgtps</h3>
                          <p className="text-white/70 text-sm font-medium tracking-wide">Official TikTok Account</p>
                       </div>
                    </div>
