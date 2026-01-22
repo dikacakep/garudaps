@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import { Headphones, ArrowRight, Zap } from "lucide-react"
@@ -10,6 +10,28 @@ export default function WelcomeScreen() {
   const [isHidden, setIsHidden] = useState(false)
   
   const audioRef = useRef<HTMLAudioElement | null>(null)
+
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const handleControl = (e: any) => {
+      if (!audioRef.current) return;
+      
+      if (e.detail.action === "pause") {
+        console.log("Pausing BGM because video started...");
+        audioRef.current.pause();
+      } else if (e.detail.action === "play") {
+        console.log("Resuming BGM because video ended/paused...");
+        if (isOpening || isHidden) { 
+           audioRef.current.play().catch(err => console.log("Playback prevented:", err));
+        }
+      }
+    };
+
+    window.addEventListener("garuda-bgm-control", handleControl);
+
+    return () => window.removeEventListener("garuda-bgm-control", handleControl);
+  }, [isOpening, isHidden]); 
+
 
   const handleEnter = () => {
     if (audioRef.current) {
@@ -31,12 +53,13 @@ export default function WelcomeScreen() {
 
   return (
     <>
-      <audio ref={audioRef} loop>
+      <audio ref={audioRef} id="bgm-audio" loop>
         <source src="/audio/bgm.mp3" type="audio/mpeg" />
       </audio>
 
       {/* CONTAINER  */}
       <div className={`fixed inset-0 flex items-center justify-center overflow-hidden transition-all duration-300 ${isHidden ? "z-[-1] pointer-events-none opacity-0" : "z-9999 opacity-100"}`}>
+        
         
         {/* --- LEFT CURTAIN --- */}
         <motion.div
@@ -45,8 +68,8 @@ export default function WelcomeScreen() {
           transition={curtainTransition}
           className="absolute top-0 left-0 w-1/2 h-full bg-[#050505] z-20 overflow-hidden border-r border-white/5 will-change-transform"
         >
+          {/* ... Content Left Curtain ... */}
           <div className="absolute inset-0 bg-linear-to-b from-[#0a0a0a] via-[#111] to-[#050505]" />
-          {/* Cyber Grid Floor */}
           <div 
             className="absolute bottom-0 left-0 w-full h-1/2 opacity-30 pointer-events-none"
             style={{
@@ -56,8 +79,6 @@ export default function WelcomeScreen() {
                 maskImage: 'linear-gradient(to top, black, transparent 80%)'
             }} 
           />
-
-          {/* MASCOT KIRI */}
           <div className="absolute -bottom-20 -left-20 w-125 h-125 opacity-40 mix-blend-screen pointer-events-none z-10">
              <motion.div 
                 animate={{ y: [0, -20, 0] }}
@@ -73,7 +94,6 @@ export default function WelcomeScreen() {
                 />
              </motion.div>
           </div>
-
           <div className="absolute inset-0 bg-linear-to-r from-black via-transparent to-black/50 z-20" />
         </motion.div>
 
@@ -84,9 +104,9 @@ export default function WelcomeScreen() {
           transition={curtainTransition}
           className="absolute top-0 right-0 w-1/2 h-full bg-[#050505] z-20 overflow-hidden border-l border-white/5 will-change-transform"
         >
+           {/* ... Content Right Curtain ... */}
           <div className="absolute inset-0 bg-linear-to-b from-[#0a0a0a] via-[#111] to-[#050505]" />
           <div className="absolute inset-0 bg-[url('/images/banner.jpg')] bg-cover bg-right opacity-20 mix-blend-overlay grayscale" />
-
            <div 
             className="absolute bottom-0 right-0 w-full h-1/2 opacity-30 pointer-events-none"
             style={{
@@ -96,8 +116,6 @@ export default function WelcomeScreen() {
                 maskImage: 'linear-gradient(to top, black, transparent 80%)'
             }} 
           />
-
-          {/* MASCOT KANAN */}
           <div className="absolute -top-20 -right-20 w-125 h-125 opacity-30 mix-blend-screen pointer-events-none z-10 transform scale-x-[-1]">
              <motion.div 
                 animate={{ y: [0, 20, 0] }}
@@ -113,7 +131,6 @@ export default function WelcomeScreen() {
                 />
              </motion.div>
           </div>
-
           <div className="absolute inset-0 bg-linear-to-l from-black via-transparent to-black/50 z-20" />
         </motion.div>
 
@@ -157,7 +174,7 @@ export default function WelcomeScreen() {
              </p>
           </div>
 
-          {/* --- UTTON --- */}
+          {/* --- BUTTON --- */}
           <div className="relative group">
             <div className="absolute -inset-1 bg-linear-to-r from-orange-600 to-red-600 rounded-2xl blur opacity-20 group-hover:opacity-60 transition duration-500 group-hover:duration-200 animate-pulse" />
             
