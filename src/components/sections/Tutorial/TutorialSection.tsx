@@ -187,28 +187,31 @@ const LazyVideoPlayer = ({
       )}
 
       {isLoaded && (
-        <>
-          {isBuffering && (
-            <div className="absolute inset-0 flex items-center justify-center z-10 bg-black/50">
-              <Loader2 className="w-10 h-10 text-orange-500 animate-spin" />
-            </div>
-          )}
+      <>
+        {isBuffering && (
+          <div className="absolute inset-0 flex items-center justify-center z-10 bg-black/50 backdrop-blur-[2px]">
+            <Loader2 className="w-12 h-12 text-orange-500 animate-spin drop-shadow-[0_0_10px_rgba(249,115,22,0.5)]" />
+          </div>
+        )}
 
-          <video
-            ref={videoRef}
-            src={src}
-            controls
-            autoPlay 
-            className="w-full h-full object-contain bg-black"
-            onPlay={onPlaySignal}
-            onPause={onPauseSignal}
-            onEnded={onPauseSignal}
-            onWaiting={() => setIsBuffering(true)} 
-            onPlaying={() => setIsBuffering(false)} 
-            onCanPlay={() => setIsBuffering(false)}
-          />
-        </>
-      )}
+        <video
+          ref={videoRef}
+          src={src}
+          
+          controls={!isBuffering} 
+          
+          autoPlay 
+          className="w-full h-full object-contain bg-black"
+          onPlay={onPlaySignal}
+          onPause={onPauseSignal}
+          onEnded={onPauseSignal}
+          
+          onWaiting={() => setIsBuffering(true)}
+          onPlaying={() => setIsBuffering(false)}
+          onCanPlay={() => setIsBuffering(false)}
+        />
+      </>
+    )}
     </div>
   )
 }
