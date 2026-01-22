@@ -66,6 +66,16 @@ const teamMembers = [
     icon: Shield,
     desc: "Ready to assist! Maintaining order."
   },
+  {
+    id: "akiko",
+    name: "akiko",
+    role: "Server Moderator",
+    avatar: "/images/team/akiko.jpeg",
+    color: "#FF5C00",
+    stats: "07",
+    icon: Shield,
+    desc: "Ensuring your best gameplay experience."
+  },
 ]
 
 export default function Teams() {
