@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
-import { Monitor, Smartphone, Apple, Command, Download, Copy, Check, LucideIcon, Video } from "lucide-react"
+import { Monitor, Smartphone, Apple, Command, Download, Copy, Check, LucideIcon, Video, Play, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 interface TutorialStep {
@@ -31,6 +31,7 @@ const TUTORIAL_DATA: TutorialItem[] = [
     icon: Smartphone,
     color: "text-orange-400",
     imageSrc: "/images/logo/garudaps.jpg",
+    videoSrc: "/videos/ios.mp4", 
     steps: [
       { text: "Uninstall Real Growtopia if you have it. " },
       { text: "Restart your device (optional but recommended)." },
@@ -145,10 +146,76 @@ const CodeSnippet = ({ code, isMultiLine }: { code: string, isMultiLine?: boolea
   )
 }
 
+const LazyVideoPlayer = ({ 
+  src, 
+  onPlaySignal, 
+  onPauseSignal 
+}: { 
+  src: string, 
+  onPlaySignal: () => void, 
+  onPauseSignal: () => void 
+}) => {
+  const [isLoaded, setIsLoaded] = useState(false) 
+  const [isBuffering, setIsBuffering] = useState(true) 
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  const handleLoadClick = () => {
+    setIsLoaded(true)
+    onPlaySignal() 
+  }
+
+  return (
+    <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-black group/video">
+      
+      {!isLoaded && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-zinc-900/80 backdrop-blur-sm z-20">
+          <div className="absolute inset-0 bg-[url('/images/logo/garudaps.jpg')] bg-cover opacity-20 grayscale" />
+          
+          <button 
+            onClick={handleLoadClick}
+            className="relative group/btn flex items-center justify-center w-20 h-20 rounded-full bg-white/10 border border-white/20 backdrop-blur-md hover:scale-110 hover:bg-orange-600 hover:border-orange-500 transition-all duration-300"
+          >
+            <Play className="w-8 h-8 text-white fill-white translate-x-1" />
+            
+            <span className="absolute -inset-2 rounded-full border border-white/10 animate-ping opacity-50 pointer-events-none" />
+          </button>
+          
+          <span className="mt-4 text-xs font-mono text-white/50 uppercase tracking-widest">
+            Click to Load Tutorial
+          </span>
+        </div>
+      )}
+
+      {isLoaded && (
+        <>
+          {isBuffering && (
+            <div className="absolute inset-0 flex items-center justify-center z-10 bg-black/50">
+              <Loader2 className="w-10 h-10 text-orange-500 animate-spin" />
+            </div>
+          )}
+
+          <video
+            ref={videoRef}
+            src={src}
+            controls
+            autoPlay 
+            className="w-full h-full object-contain bg-black"
+            onPlay={onPlaySignal}
+            onPause={onPauseSignal}
+            onEnded={onPauseSignal}
+            onWaiting={() => setIsBuffering(true)} 
+            onPlaying={() => setIsBuffering(false)} 
+            onCanPlay={() => setIsBuffering(false)}
+          />
+        </>
+      )}
+    </div>
+  )
+}
+
 export default function TutorialSection() {
   const [activeTab, setActiveTab] = useState("apk")
   const activeContent = TUTORIAL_DATA.find(t => t.id === activeTab) || TUTORIAL_DATA[0]
-  const videoRef = useRef<HTMLVideoElement>(null)
   
   const hasVideo = !!activeContent.videoSrc;
 
@@ -161,14 +228,6 @@ export default function TutorialSection() {
     const event = new CustomEvent("garuda-bgm-control", { detail: { action: "play" } });
     window.dispatchEvent(event);
   }
-
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.pause();
-      videoRef.current.currentTime = 0;
-      handleVideoPause(); 
-    }
-  }, [activeTab])
 
   return (
     <section id="tutorial" className="relative py-24 bg-[#0a0a0a] overflow-hidden">
@@ -334,7 +393,7 @@ export default function TutorialSection() {
                         ))}
                      </div>
 
-                     {/* HTML5 VIDEO PLAYER */}
+                     {/* VIDEO PLAYER */}
                      {hasVideo && (
                         <motion.div 
                           initial={{ opacity: 0, y: 20 }}
@@ -347,17 +406,13 @@ export default function TutorialSection() {
                               <h4 className="text-lg font-bold text-white tracking-wide">Video Walkthrough</h4>
                            </div>
                            
-                           <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-black group/video">
-                              <video
-                                ref={videoRef}
-                                src={activeContent.videoSrc}
-                                controls
-                                className="w-full h-full object-contain bg-black" 
-                                onPlay={handleVideoPlay}
-                                onPause={handleVideoPause}
-                                onEnded={handleVideoPause}
-                              />
-                           </div>
+                           <LazyVideoPlayer 
+                              key={activeTab} 
+                              src={activeContent.videoSrc!} 
+                              onPlaySignal={handleVideoPlay}
+                              onPauseSignal={handleVideoPause}
+                           />
+
                         </motion.div>
                      )}
                   </div>
