@@ -31,7 +31,6 @@ const TUTORIAL_DATA: TutorialItem[] = [
     icon: Smartphone,
     color: "text-orange-400",
     imageSrc: "/images/logo/garudaps.jpg",
-    videoSrc: "/videos/ios.mp4", 
     steps: [
       { text: "Uninstall Real Growtopia if you have it. " },
       { text: "Restart your device (optional but recommended)." },
