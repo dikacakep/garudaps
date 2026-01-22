@@ -352,13 +352,11 @@ export default function TutorialSection() {
                                 ref={videoRef}
                                 src={activeContent.videoSrc}
                                 controls
-                                className="w-full h-full object-cover"
+                                className="w-full h-full object-contain bg-black" 
                                 onPlay={handleVideoPlay}
                                 onPause={handleVideoPause}
                                 onEnded={handleVideoPause}
-                              >
-                                Your browser does not support the video tag.
-                              </video>
+                              />
                            </div>
                         </motion.div>
                      )}
