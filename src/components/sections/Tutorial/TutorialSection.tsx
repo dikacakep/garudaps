@@ -1,9 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
-import { Monitor, Smartphone, Apple, Command, Download, Copy, Check, LucideIcon } from "lucide-react"
+import { Monitor, Smartphone, Apple, Command, Download, Copy, Check, LucideIcon, Video } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 interface TutorialStep {
@@ -20,6 +20,7 @@ interface TutorialItem {
   icon: LucideIcon;
   color: string;
   imageSrc: string;
+  videoSrc?: string;
   steps: TutorialStep[];
 }
 
@@ -95,6 +96,7 @@ const TUTORIAL_DATA: TutorialItem[] = [
     icon: Apple,
     color: "text-gray-200",
     imageSrc: "/images/icons/surge.png",
+    videoSrc: "/videos/ios.mp4", 
     steps: [
       { text: "Install Surge 5 from App Store", link: "https://apps.apple.com/us/app/surge-5/id1442620678" },
       { text: "Open App → Import Profile via URL.", code: "https://play.garudaps.com/ios" },
@@ -146,6 +148,27 @@ const CodeSnippet = ({ code, isMultiLine }: { code: string, isMultiLine?: boolea
 export default function TutorialSection() {
   const [activeTab, setActiveTab] = useState("apk")
   const activeContent = TUTORIAL_DATA.find(t => t.id === activeTab) || TUTORIAL_DATA[0]
+  const videoRef = useRef<HTMLVideoElement>(null)
+  
+  const hasVideo = !!activeContent.videoSrc;
+
+  const handleVideoPlay = () => {
+    const event = new CustomEvent("garuda-bgm-control", { detail: { action: "pause" } });
+    window.dispatchEvent(event);
+  }
+
+  const handleVideoPause = () => {
+    const event = new CustomEvent("garuda-bgm-control", { detail: { action: "play" } });
+    window.dispatchEvent(event);
+  }
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+      handleVideoPause(); 
+    }
+  }, [activeTab])
 
   return (
     <section id="tutorial" className="relative py-24 bg-[#0a0a0a] overflow-hidden">
@@ -174,7 +197,7 @@ export default function TutorialSection() {
           </p>
         </div>
 
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           
           {/* TAB BUTTONS */}
           <div className="flex flex-wrap md:flex-nowrap justify-center gap-2 mb-8 p-2 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm relative z-20">
@@ -183,12 +206,20 @@ export default function TutorialSection() {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`
-                  relative px-4 py-3 rounded-xl flex items-center gap-2 transition-all duration-300
+                  relative px-4 py-3 rounded-xl flex items-center gap-2 transition-all duration-300 group
                   ${activeTab === tab.id ? "bg-orange-600 text-white shadow-lg shadow-orange-500/20" : "hover:bg-white/5 text-white/50 hover:text-white"}
                 `}
               >
                 <tab.icon className={`w-4 h-4 ${activeTab === tab.id ? "text-white" : tab.color}`} />
                 <span className="text-sm font-bold whitespace-nowrap">{tab.label}</span>
+                
+                {/* Indikator ada video */}
+                {tab.videoSrc && (
+                  <span className={`ml-1 flex h-2 w-2 relative ${activeTab === tab.id ? 'opacity-100' : 'opacity-50'}`}>
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                  </span>
+                )}
                 
                 {activeTab === tab.id && (
                   <motion.div 
@@ -212,71 +243,127 @@ export default function TutorialSection() {
             >
               <div className="absolute inset-0 opacity-[0.04] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none mix-blend-overlay" />
 
-              <div className="h-10 bg-white/5 border-b border-white/5 flex items-center px-6 gap-2 backdrop-blur-md relative z-10">
+              {/* Window Controls Header */}
+              <div className="h-10 bg-white/5 border-b border-white/5 flex items-center justify-between px-6 backdrop-blur-md relative z-10">
                  <div className="flex gap-1.5">
                     <div className="w-3 h-3 rounded-full bg-red-500/40" />
                     <div className="w-3 h-3 rounded-full bg-yellow-500/40" />
                     <div className="w-3 h-3 rounded-full bg-green-500/40" />
                  </div>
-                 <div className="ml-4 text-[10px] font-mono text-white/20 uppercase tracking-widest hidden md:block">
-                    GarudaPS_Protocol // {activeContent.label}
+                 <div className="flex items-center gap-2">
+                    {hasVideo && (
+                       <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-red-500/10 border border-red-500/20 text-[10px] text-red-400 font-bold uppercase tracking-wide">
+                          <Video className="w-3 h-3" /> Video Available
+                       </span>
+                    )}
+                    <div className="text-[10px] font-mono text-white/20 uppercase tracking-widest hidden md:block">
+                        GarudaPS_Protocol // {activeContent.label}
+                    </div>
                  </div>
               </div>
 
-              <div className="p-6 md:p-10 grid grid-cols-1 lg:grid-cols-3 gap-10 relative z-10">
-                <div className="flex flex-col items-center justify-center lg:border-r border-white/5 pr-0 lg:pr-10">
-                   <div className="relative w-32 h-32 mb-6">
-                      <div className="absolute inset-0 bg-orange-500/20 blur-2xl rounded-full animate-pulse" />
-                      <Image 
-                        src={activeContent.imageSrc} 
-                        alt={activeContent.label} 
-                        fill 
-                        className="object-contain relative z-10 drop-shadow-2xl"
-                      />
-                   </div>
-                   <h3 className="text-2xl font-black text-white uppercase italic tracking-tighter drop-shadow-lg">
-                      {activeContent.label}
-                   </h3>
-                   <div className="mt-2 px-3 py-1 bg-green-500/10 border border-green-500/20 rounded-full text-[10px] font-bold text-green-400 uppercase tracking-widest backdrop-blur-md">
-                      Status: Compatible
-                   </div>
-                </div>
+              <div className="p-6 md:p-10 relative z-10">
+                
+                <div className={`grid grid-cols-1 lg:grid-cols-3 gap-10`}>
+                  
+                  {/* LEFT COLUMN: INFO & ICON */}
+                  <div className="flex flex-col items-center lg:items-start lg:border-r border-white/5 pr-0 lg:pr-10">
+                     <div className="flex flex-col items-center justify-center w-full sticky top-0">
+                        <div className="relative w-32 h-32 mb-6 group">
+                            <div className="absolute inset-0 bg-orange-500/20 blur-2xl rounded-full animate-pulse" />
+                            <Image 
+                              src={activeContent.imageSrc} 
+                              alt={activeContent.label} 
+                              fill 
+                              className="object-contain relative z-10 drop-shadow-2xl transition-transform duration-500 group-hover:scale-110"
+                            />
+                        </div>
+                        <h3 className="text-2xl font-black text-white uppercase italic tracking-tighter drop-shadow-lg text-center">
+                            {activeContent.label}
+                        </h3>
+                        <div className="mt-2 px-3 py-1 bg-green-500/10 border border-green-500/20 rounded-full text-[10px] font-bold text-green-400 uppercase tracking-widest backdrop-blur-md">
+                            Status: Compatible
+                        </div>
+                        
+                        {hasVideo && (
+                           <p className="mt-6 text-xs text-white/40 text-center max-w-50">
+                              Tutorial video is available. Watch it on the right side.
+                           </p>
+                        )}
+                     </div>
+                  </div>
 
-                <div className="lg:col-span-2 space-y-6">
-                   {activeContent.steps.map((step, idx) => (
-                      <motion.div 
-                        key={idx}
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: idx * 0.1 }}
-                        className="flex gap-4 group"
-                      >
-                         <div className="shrink-0 w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-orange-500 font-mono font-bold text-sm group-hover:bg-orange-500 group-hover:text-white transition-colors shadow-lg">
-                            {idx + 1}
-                         </div>
-                         <div className="flex-1">
-                            <p className="text-white/80 text-sm md:text-base font-medium leading-relaxed drop-shadow-md">
-                              {step.text}
-                            </p>
-                            
-                            {step.code && (
-                              <CodeSnippet code={step.code} isMultiLine={step.isMultiLine} />
-                            )}
-                            
-                            {step.link && (
-                               <Button 
-                                 variant="outline" 
-                                 size="sm" 
-                                 className="mt-3 border-orange-500/30 bg-orange-500/5 text-orange-400 hover:bg-orange-500 hover:text-white transition-all backdrop-blur-sm"
-                                 onClick={() => window.open(step.link, "_blank")}
-                               >
-                                 <Download className="w-4 h-4 mr-2" />
-                                 {step.isDownload ? "Download File" : "Download App"}
-                               </Button>
-                            )}
-                         </div>
-                      </motion.div>
-                   ))}
+                  {/* RIGHT CONTENT AREA */}
+                  <div className="lg:col-span-2 flex flex-col gap-10">
+                     
+                     <div className="space-y-6">
+                        <div className="flex items-center gap-2 mb-4">
+                           <Command className="w-5 h-5 text-orange-500" />
+                           <h4 className="text-lg font-bold text-white tracking-wide">Instruction Manual</h4>
+                        </div>
+
+                        {activeContent.steps.map((step, idx) => (
+                            <motion.div 
+                              key={idx}
+                              initial={{ opacity: 0, x: 20 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: idx * 0.1 }}
+                              className="flex gap-4 group"
+                            >
+                              <div className="shrink-0 w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-orange-500 font-mono font-bold text-sm group-hover:bg-orange-500 group-hover:text-white transition-colors shadow-lg">
+                                  {idx + 1}
+                              </div>
+                              <div className="flex-1">
+                                  <p className="text-white/80 text-sm md:text-base font-medium leading-relaxed drop-shadow-md">
+                                    {step.text}
+                                  </p>
+                                  {step.code && <CodeSnippet code={step.code} isMultiLine={step.isMultiLine} />}
+                                  {step.link && (
+                                    <Button 
+                                      variant="outline" 
+                                      size="sm" 
+                                      className="mt-3 border-orange-500/30 bg-orange-500/5 text-orange-400 hover:bg-orange-500 hover:text-white transition-all backdrop-blur-sm"
+                                      onClick={() => window.open(step.link, "_blank")}
+                                    >
+                                      <Download className="w-4 h-4 mr-2" />
+                                      {step.isDownload ? "Download File" : "Download App"}
+                                    </Button>
+                                  )}
+                              </div>
+                            </motion.div>
+                        ))}
+                     </div>
+
+                     {/* HTML5 VIDEO PLAYER */}
+                     {hasVideo && (
+                        <motion.div 
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.4 }}
+                          className="pt-8 border-t border-white/5"
+                        >
+                           <div className="flex items-center gap-2 mb-4">
+                              <Video className="w-5 h-5 text-red-500" />
+                              <h4 className="text-lg font-bold text-white tracking-wide">Video Walkthrough</h4>
+                           </div>
+                           
+                           <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-black group/video">
+                              <video
+                                ref={videoRef}
+                                src={activeContent.videoSrc}
+                                controls
+                                className="w-full h-full object-cover"
+                                onPlay={handleVideoPlay}
+                                onPause={handleVideoPause}
+                                onEnded={handleVideoPause}
+                              >
+                                Your browser does not support the video tag.
+                              </video>
+                           </div>
+                        </motion.div>
+                     )}
+                  </div>
+
                 </div>
               </div>
               
