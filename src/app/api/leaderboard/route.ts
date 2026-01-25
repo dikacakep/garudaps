@@ -1,0 +1,24 @@
+import { NextResponse } from "next/server";
+
+export async function GET() {
+  try {
+    const res = await fetch("http://157.66.54.50:5000/api/leaderboard", {
+      cache: "no-store",
+    });
+
+    if (!res.ok) {
+      throw new Error(`API error: ${res.status}`);
+    }
+
+    const data = await res.json();
+    
+    return NextResponse.json(data);
+    
+  } catch (error) {
+    console.error("Leaderboard Proxy Error:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch leaderboard" },
+      { status: 500 }
+    );
+  }
+}
