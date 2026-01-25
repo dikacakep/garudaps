@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 import { Monitor, Smartphone, Apple, Command, Download, Copy, Check, LucideIcon, Video, Play, Loader2 } from "lucide-react"

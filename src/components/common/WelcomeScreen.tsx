@@ -28,7 +28,6 @@ export default function WelcomeScreen() {
     };
 
     window.addEventListener("garuda-bgm-control", handleControl);
-
     return () => window.removeEventListener("garuda-bgm-control", handleControl);
   }, [isOpening, isHidden]); 
 
@@ -51,24 +50,27 @@ export default function WelcomeScreen() {
     ease: [0.76, 0, 0.24, 1] as const
   }
 
+  // ❌ JANGAN PAKAI INI. Ini yang bikin lagu mati.
+  // if (isHidden) return null; 
+
   return (
     <>
       <audio ref={audioRef} id="bgm-audio" loop>
         <source src="/audio/bgm.mp3" type="audio/mpeg" />
       </audio>
-
-      {/* CONTAINER  */}
-      <div className={`fixed inset-0 flex items-center justify-center overflow-hidden transition-all duration-300 ${isHidden ? "z-[-1] pointer-events-none opacity-0" : "z-9999 opacity-100"}`}>
-        
+      <div 
+        className={`fixed inset-0 flex items-center justify-center overflow-hidden transition-colors duration-300 
+        ${isHidden ? "z-[-1] pointer-events-none opacity-0" : "z-9999 opacity-100"} 
+        ${isOpening ? "bg-transparent" : "bg-black"}`}
+      >
         
         {/* --- LEFT CURTAIN --- */}
         <motion.div
           initial={{ x: "0%" }}
           animate={{ x: isOpening ? "-100%" : "0%" }}
           transition={curtainTransition}
-          className="absolute top-0 left-0 w-1/2 h-full bg-[#050505] z-20 overflow-hidden border-r border-white/5 will-change-transform"
+          className="absolute top-0 left-0 w-[50.5%] h-full bg-[#050505] z-20 overflow-hidden border-r border-white/5 will-change-transform"
         >
-          {/* ... Content Left Curtain ... */}
           <div className="absolute inset-0 bg-linear-to-b from-[#0a0a0a] via-[#111] to-[#050505]" />
           <div 
             className="absolute bottom-0 left-0 w-full h-1/2 opacity-30 pointer-events-none"
@@ -102,9 +104,8 @@ export default function WelcomeScreen() {
           initial={{ x: "0%" }}
           animate={{ x: isOpening ? "100%" : "0%" }}
           transition={curtainTransition}
-          className="absolute top-0 right-0 w-1/2 h-full bg-[#050505] z-20 overflow-hidden border-l border-white/5 will-change-transform"
+          className="absolute top-0 right-0 w-[50.5%] h-full bg-[#050505] z-20 overflow-hidden border-l border-white/5 will-change-transform"
         >
-           {/* ... Content Right Curtain ... */}
           <div className="absolute inset-0 bg-linear-to-b from-[#0a0a0a] via-[#111] to-[#050505]" />
           <div className="absolute inset-0 bg-[url('/images/banner.jpg')] bg-cover bg-right opacity-20 mix-blend-overlay grayscale" />
            <div 
@@ -134,6 +135,7 @@ export default function WelcomeScreen() {
           <div className="absolute inset-0 bg-linear-to-l from-black via-transparent to-black/50 z-20" />
         </motion.div>
 
+        {/* CONTENT CENTER */}
         <motion.div
           animate={{ 
              opacity: isOpening ? 0 : 1, 
@@ -142,8 +144,8 @@ export default function WelcomeScreen() {
           transition={{ duration: 0.5 }} 
           className="relative z-30 flex flex-col items-center justify-center w-full max-w-3xl px-6"
         >
-          
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-175 h-125 bg-orange-600/10 blur-[100px] rounded-full pointer-events-none" />
+           
+           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-175 h-125 bg-orange-600/10 blur-[100px] rounded-full pointer-events-none" />
 
           {/* LOGO */}
           <div className="relative w-80 h-40 mb-8 group cursor-default">
@@ -174,7 +176,7 @@ export default function WelcomeScreen() {
              </p>
           </div>
 
-          {/* --- BUTTON --- */}
+          {/* BUTTON */}
           <div className="relative group">
             <div className="absolute -inset-1 bg-linear-to-r from-orange-600 to-red-600 rounded-2xl blur opacity-20 group-hover:opacity-60 transition duration-500 group-hover:duration-200 animate-pulse" />
             
@@ -201,7 +203,6 @@ export default function WelcomeScreen() {
           </div>
 
         </motion.div>
-
       </div>
     </>
   )
