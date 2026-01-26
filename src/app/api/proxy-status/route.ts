@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    const response = await fetch("http://157.66.54.50:3000/api/status", {
+    const response = await fetch("http://5.175.246.33:3001/api/status", {
       cache: 'no-store', 
     });
     
