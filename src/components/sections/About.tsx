@@ -1,11 +1,9 @@
 "use client"
 
-import { useServer } from "@/context/ServerContext"
 import { motion } from "framer-motion"
 import Image from "next/image"
 
 export default function About() {
-  const { online } = useServer();
 
   return (
     <section id="about" className="relative py-40 overflow-hidden bg-[#0a0a0a]">
@@ -73,15 +71,10 @@ export default function About() {
                       <span className="text-white font-mono font-bold text-lg">Free BGL</span>
                    </div>
 
-                   {/* DYNAMIC SYSTEM STATUS */}
                    <div className="px-4 py-2 rounded-lg bg-white/2 border border-white/5 flex flex-col items-center flex-1">
                       <span className="text-[10px] text-white/40 uppercase tracking-widest font-semibold">System</span>
-                      <span className={`font-mono font-bold text-lg transition-all duration-500 ${
-                        online 
-                          ? "text-green-400 shadow-green-500/50 drop-shadow-[0_0_8px_rgba(74,222,128,0.5)]" 
-                          : "text-red-500 shadow-red-500/50 drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]"
-                      }`}>
-                        {online ? "ONLINE" : "OFFLINE"}
+                      <span className="font-mono font-bold text-lg text-green-400 shadow-green-500/50 drop-shadow-[0_0_8px_rgba(74,222,128,0.5)]">
+                        ONLINE
                       </span>
                    </div>
                 </div>
