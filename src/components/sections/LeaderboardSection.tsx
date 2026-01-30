@@ -9,16 +9,11 @@ import { Trophy, Crown, AlertTriangle,  Sparkles} from "lucide-react";
 interface Player {
   rank: number;
   name: string;
-  wl: string;
-  dl: string;
-  bgl: string;
-  ggl: string;
-  totalWL: string;
+  totalWL: number;
 }
 
-interface ApiResponse {
-  success: boolean;
-  data: Player[];
+interface RawLeaderboard {
+  richLeaderboard: [string, number][];
 }
 
 const listContainerVariants: Variants = {
@@ -47,25 +42,37 @@ export default function LeaderboardSection() {
   const [error, setError] = useState(false);
 
   const fetchLeaderboard = async () => {
-    setLoading(true);
-    setError(false);
-    try {
-      const res = await fetch("/api/leaderboard");
-      if (!res.ok) throw new Error("Failed");
-      const json: ApiResponse = await res.json();
+  setLoading(true);
+  setError(false);
 
-      if (json.success && Array.isArray(json.data)) {
-        setPlayers(json.data);
-      } else {
-        setPlayers([]); 
-      }
-    } catch (err) {
-      console.error(err);
-      setError(true);
-    } finally {
-      setLoading(false);
+  try {
+    const res = await fetch("/api/leaderboard");
+    if (!res.ok) throw new Error("Failed to fetch leaderboard");
+
+    const json: RawLeaderboard = await res.json();
+
+    if (!Array.isArray(json.richLeaderboard)) {
+      setPlayers([]);
+      return;
     }
-  };
+
+    const players: Player[] = json.richLeaderboard.map(
+      ([name, totalWL], index) => ({
+        rank: index + 1,
+        name,
+        totalWL
+      })
+    );
+
+    setPlayers(players);
+  } catch (err) {
+    console.error(err);
+    setError(true);
+    setPlayers([]);
+  } finally {
+    setLoading(false);
+  }
+};
 
   useEffect(() => {
     fetchLeaderboard();
