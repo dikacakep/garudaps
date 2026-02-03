@@ -1,12 +1,12 @@
 "use client"
 
-import { useState } from "react"
+import { useState} from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import { ArrowRight, Sparkles } from "lucide-react"
 
-// --- ICONS (FIXED: Functional Components agar ukuran fleksibel) ---
+// --- ICONS  ---
 const Icons = {
   discord: ({ className }: { className?: string }) => (
     <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -65,6 +65,7 @@ export default function Community() {
               src="/images/banner.jpg" 
               alt="Community Background" 
               fill 
+              sizes="100vw"
               className="object-cover opacity-80" 
               priority
             />
@@ -81,6 +82,7 @@ export default function Community() {
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
             whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-white/70 mb-6 backdrop-blur-md shadow-lg"
           >
               <Sparkles className="w-3 h-3 text-orange-400" />
@@ -90,6 +92,7 @@ export default function Community() {
           <motion.h2 
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
             className="text-4xl md:text-6xl font-black uppercase tracking-tight mb-4 text-white drop-shadow-2xl"
           >
             Server{" "}
@@ -139,7 +142,7 @@ export default function Community() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -15, scale: 0.98 }}
               transition={{ duration: 0.3 }}
-              className="relative overflow-hidden bg-[#111]/60 backdrop-blur-lg border border-white/10 rounded-4xl p-6 md:p-12 shadow-2xl flex flex-col lg:flex-row gap-12 items-center min-h-125"
+              className="relative overflow-hidden bg-[#111]/60 backdrop-blur-lg border border-white/10 rounded-4xl p-6 md:p-12 shadow-2xl flex flex-col lg:flex-row gap-12 items-center min-h-125 transform-gpu will-change-transform"
             >
               
               {/* --- LEFT SIDE  --- */}
@@ -190,13 +193,14 @@ export default function Community() {
                       width="100%" 
                       height="100%" 
                       frameBorder="0" 
+                      loading="lazy"
                       sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
                       className="absolute inset-0 w-full h-full"
                     ></iframe>
                   </div>
                 )}
 
-                {/*  WHATSAPP  */}
+                {/* WHATSAPP  */}
                 {activeTab === "whatsapp" && (
                    <div 
                      className="w-full h-100 relative rounded-3xl overflow-hidden flex flex-col items-center justify-center p-8 text-center transition-all duration-500 group hover:scale-[1.02]"
@@ -213,7 +217,7 @@ export default function Community() {
                    </div>
                 )}
 
-                {/*  TIKTOK  */}
+                {/* TIKTOK  */}
                 {activeTab === "tiktok" && (
                    <div 
                       className="w-full h-100 relative rounded-3xl overflow-hidden flex flex-col items-center justify-center p-8 text-center transition-all duration-500 group hover:scale-[1.02]"

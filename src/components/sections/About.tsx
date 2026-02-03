@@ -14,13 +14,14 @@ export default function About() {
 
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808005_1px,transparent_1px),linear-gradient(to_bottom,#80808005_1px,transparent_1px)] bg-size-[40px_40px] pointer-events-none z-0" />
 
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-200 h-150 bg-orange-600/10 blur-[100px] rounded-full pointer-events-none z-0" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-200 h-150 bg-orange-600/10 blur-[100px] rounded-full pointer-events-none z-0 transform-gpu" />
 
       <div className="w-full max-w-7xl px-4 mx-auto relative z-20">
         
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, margin: "-100px" }} 
           transition={{ duration: 0.8 }}
           className="relative group"
         >
@@ -68,7 +69,7 @@ export default function About() {
 
                    <div className="px-4 py-2 rounded-lg bg-white/2 border border-white/5 flex flex-col items-center flex-1">
                       <span className="text-[10px] text-white/40 uppercase tracking-widest font-semibold">Start Item</span>
-                      <span className="text-white font-mono font-bold text-lg">Free BGL</span>
+                      <span className="text-white font-mono font-bold text-lg">Free DL</span>
                    </div>
 
                    <div className="px-4 py-2 rounded-lg bg-white/2 border border-white/5 flex flex-col items-center flex-1">
@@ -88,7 +89,8 @@ export default function About() {
                   src="/images/logo/garudaps.jpg" 
                   alt="GarudaPS World"
                   fill
-                  className="object-cover opacity-90 group-hover/image:scale-105 group-hover/image:opacity-100 transition-all duration-1000 ease-out"
+                  sizes="(max-width: 1024px) 100vw, 50vw" 
+                  className="object-cover opacity-90 group-hover/image:scale-105 group-hover/image:opacity-100 transition-all duration-1000 ease-out transform-gpu will-change-transform"
                 />
 
                 <div className="absolute inset-0 bg-black/20 pointer-events-none" />
@@ -103,6 +105,7 @@ export default function About() {
                          src="/images/logo/GARUDAPS2026.png" 
                          alt="Logo Hologram"
                          fill
+                         sizes="96px" 
                          className="object-contain drop-shadow-2xl relative z-10"
                       />
                    </div>

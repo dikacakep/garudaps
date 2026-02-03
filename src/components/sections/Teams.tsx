@@ -79,30 +79,26 @@ const teamMembers = [
 ]
 
 export default function Teams() {
-  const [activeId, setActiveId] = useState(teamMembers[0].id)
+  const [activeIndex, setActiveIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
 
   useEffect(() => {
     if (isPaused) return;
 
     const interval = setInterval(() => {
-      setActiveId((currentId) => {
-        const currentIndex = teamMembers.findIndex(m => m.id === currentId);
-        const nextIndex = (currentIndex + 1) % teamMembers.length;
-        return teamMembers[nextIndex].id;
-      });
+      setActiveIndex((prev) => (prev + 1) % teamMembers.length);
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [isPaused, activeId]);
+  }, [isPaused]);
 
   return (
     <section id="teams" className="py-24 min-h-screen bg-linear-to-b from-black to-[#0a0a0a] relative flex items-center justify-center overflow-hidden">
 
       {/* Background */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-[-20%] left-[-10%] w-200 h-200 bg-orange-600/5 blur-[120px] rounded-full" />
-        <div className="absolute bottom-[-20%] right-[-10%] w-200 h-200 bg-blue-600/5 blur-[120px] rounded-full" />
+        <div className="absolute top-[-20%] left-[-10%] w-200 h-200 bg-orange-600/5 blur-[120px] rounded-full transform-gpu" />
+        <div className="absolute bottom-[-20%] right-[-10%] w-200 h-200 bg-blue-600/5 blur-[120px] rounded-full transform-gpu" />
         <div className="absolute inset-0 opacity-[0.02] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay" />
       </div>
 
@@ -113,6 +109,7 @@ export default function Teams() {
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-4 backdrop-blur-md"
           >
             <Sparkles className="w-3 h-3 text-orange-400" />
@@ -133,16 +130,16 @@ export default function Teams() {
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          {teamMembers.map((member) => {
-            const isActive = activeId === member.id;
+          {teamMembers.map((member, index) => {
+            const isActive = activeIndex === index;
             const Icon = member.icon;
 
             return (
               <motion.div
                 key={member.id}
                 layout
-                onClick={() => setActiveId(member.id)}
-                className={`relative rounded-3xl overflow-hidden cursor-pointer border transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]
+                onClick={() => setActiveIndex(index)}
+                className={`relative rounded-3xl overflow-hidden cursor-pointer border transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] will-change-[flex-grow] transform-gpu
                     ${isActive
                     ? "flex-5 lg:flex-[3.5] border-white/20 bg-[#0a0a0a]"
                     : "flex-1 border-white/5 bg-black/40 hover:bg-white/5"
@@ -155,7 +152,8 @@ export default function Teams() {
                     src={member.avatar}
                     alt={member.name}
                     fill
-                    className={`object-cover transition-transform duration-1000 ease-out 
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className={`object-cover transition-transform duration-1000 ease-out will-change-transform 
                             ${isActive
                         ? "scale-105 grayscale-0 opacity-100"
                         : "scale-100 grayscale opacity-40 group-hover:opacity-60"
@@ -166,7 +164,6 @@ export default function Teams() {
                   {/* Dark Gradient Overlay */}
                   <div className={`absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent transition-opacity duration-500 ${isActive ? 'opacity-90' : 'opacity-80'}`} />
 
-                  {/* Color Glow Overlay (Active Only) */}
                   <div
                     className={`absolute inset-0 bg-linear-to-b from-transparent to-black/90 transition-opacity duration-500 ${isActive ? 'opacity-100' : 'opacity-0'}`}
                     style={{ mixBlendMode: 'multiply' }}
@@ -184,7 +181,7 @@ export default function Teams() {
                   />
                 )}
 
-                {/* INACTIVE STATE (Vertical Text) */}
+                {/* INACTIVE STATE  */}
                 {!isActive && (
                   <div className="absolute inset-0 z-10 flex items-center justify-center">
                     <div className="lg:[writing-mode:vertical-rl] lg:rotate-180 flex items-center gap-4 opacity-50">
@@ -197,7 +194,7 @@ export default function Teams() {
                 )}
 
                 {/* ACTIVE STATE CONTENT */}
-                <AnimatePresence>
+                <AnimatePresence mode="popLayout">
                   {isActive && (
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}

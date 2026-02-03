@@ -50,17 +50,16 @@ export default function WelcomeScreen() {
     ease: [0.76, 0, 0.24, 1] as const
   }
 
-  // ❌ JANGAN PAKAI INI. Ini yang bikin lagu mati.
-  // if (isHidden) return null; 
-
-  return (
+   return (
     <>
       <audio ref={audioRef} id="bgm-audio" loop>
         <source src="/audio/bgm.mp3" type="audio/mpeg" />
       </audio>
+      
+      {/* CONTAINER */}
       <div 
-        className={`fixed inset-0 flex items-center justify-center overflow-hidden transition-colors duration-300 
-        ${isHidden ? "z-[-1] pointer-events-none opacity-0" : "z-9999 opacity-100"} 
+        className={`fixed inset-0 flex items-center justify-center overflow-hidden transition-colors duration-300 transform-gpu
+        ${isHidden ? "z-[-1] pointer-events-none opacity-0 invisible" : "z-9999 opacity-100 visible"} 
         ${isOpening ? "bg-transparent" : "bg-black"}`}
       >
         
@@ -69,29 +68,31 @@ export default function WelcomeScreen() {
           initial={{ x: "0%" }}
           animate={{ x: isOpening ? "-100%" : "0%" }}
           transition={curtainTransition}
-          className="absolute top-0 left-0 w-[50.5%] h-full bg-[#050505] z-20 overflow-hidden border-r border-white/5 will-change-transform"
+          className="absolute top-0 left-0 w-[50.5%] h-full bg-[#050505] z-20 overflow-hidden border-r border-white/5 will-change-transform transform-gpu backface-hidden"
         >
           <div className="absolute inset-0 bg-linear-to-b from-[#0a0a0a] via-[#111] to-[#050505]" />
           <div 
-            className="absolute bottom-0 left-0 w-full h-1/2 opacity-30 pointer-events-none"
+            className="absolute bottom-0 left-0 w-full h-1/2 opacity-30 pointer-events-none transform-gpu"
             style={{
                 backgroundImage: `linear-gradient(to right, #ea580c 1px, transparent 1px), linear-gradient(to bottom, #ea580c 1px, transparent 1px)`,
                 backgroundSize: '50px 50px',
                 transform: 'perspective(500px) rotateX(60deg) translateY(100px) translateZ(-100px)',
-                maskImage: 'linear-gradient(to top, black, transparent 80%)'
+                maskImage: 'linear-gradient(to top, black, transparent 80%)',
+                willChange: 'transform' 
             }} 
           />
           <div className="absolute -bottom-20 -left-20 w-125 h-125 opacity-40 mix-blend-screen pointer-events-none z-10">
              <motion.div 
                 animate={{ y: [0, -20, 0] }}
                 transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                className="relative w-full h-full"
+                className="relative w-full h-full will-change-transform" 
              >
                 <Image 
                     src="/images/set.png"
                     alt="Guardian Left"
                     fill
                     priority 
+                    sizes="(max-width: 768px) 50vw, 33vw" 
                     className="object-contain drop-shadow-[0_0_50px_rgba(234,88,12,0.3)]"
                 />
              </motion.div>
@@ -104,30 +105,32 @@ export default function WelcomeScreen() {
           initial={{ x: "0%" }}
           animate={{ x: isOpening ? "100%" : "0%" }}
           transition={curtainTransition}
-          className="absolute top-0 right-0 w-[50.5%] h-full bg-[#050505] z-20 overflow-hidden border-l border-white/5 will-change-transform"
+          className="absolute top-0 right-0 w-[50.5%] h-full bg-[#050505] z-20 overflow-hidden border-l border-white/5 will-change-transform transform-gpu backface-hidden"
         >
           <div className="absolute inset-0 bg-linear-to-b from-[#0a0a0a] via-[#111] to-[#050505]" />
           <div className="absolute inset-0 bg-[url('/images/banner.jpg')] bg-cover bg-right opacity-20 mix-blend-overlay grayscale" />
            <div 
-            className="absolute bottom-0 right-0 w-full h-1/2 opacity-30 pointer-events-none"
+            className="absolute bottom-0 right-0 w-full h-1/2 opacity-30 pointer-events-none transform-gpu"
             style={{
                 backgroundImage: `linear-gradient(to right, #ea580c 1px, transparent 1px), linear-gradient(to bottom, #ea580c 1px, transparent 1px)`,
                 backgroundSize: '50px 50px',
                 transform: 'perspective(500px) rotateX(60deg) translateY(100px) translateZ(-100px)',
-                maskImage: 'linear-gradient(to top, black, transparent 80%)'
+                maskImage: 'linear-gradient(to top, black, transparent 80%)',
+                willChange: 'transform'
             }} 
           />
           <div className="absolute -top-20 -right-20 w-125 h-125 opacity-30 mix-blend-screen pointer-events-none z-10 transform scale-x-[-1]">
              <motion.div 
                 animate={{ y: [0, 20, 0] }}
                 transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                className="relative w-full h-full"
+                className="relative w-full h-full will-change-transform"
              >
                  <Image 
                     src="/images/set.png" 
                     alt="Guardian Right"
                     fill
                     priority
+                    sizes="(max-width: 768px) 50vw, 33vw"
                     className="object-contain drop-shadow-[0_0_50px_rgba(234,88,12,0.3)]"
                 />
              </motion.div>
@@ -142,18 +145,18 @@ export default function WelcomeScreen() {
              scale: isOpening ? 1.1 : 1, 
           }}
           transition={{ duration: 0.5 }} 
-          className="relative z-30 flex flex-col items-center justify-center w-full max-w-3xl px-6"
+          className="relative z-30 flex flex-col items-center justify-center w-full max-w-3xl px-6 transform-gpu"
         >
-           
-           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-175 h-125 bg-orange-600/10 blur-[100px] rounded-full pointer-events-none" />
+           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-175 h-125 bg-orange-600/10 blur-[100px] rounded-full pointer-events-none transform-gpu" />
 
           {/* LOGO */}
-          <div className="relative w-80 h-40 mb-8 group cursor-default">
+          <div className="relative w-80 h-40 mb-8 group cursor-default will-change-transform">
              <Image 
                 src="/images/logo/GARUDAPS2026.png" 
                 alt="Logo" 
                 fill 
                 priority
+                sizes="(max-width: 768px) 80vw, 40vw"
                 className="object-contain drop-shadow-[0_0_40px_rgba(249,115,22,0.4)]"
              />
           </div>
@@ -182,7 +185,7 @@ export default function WelcomeScreen() {
             
             <button
               onClick={handleEnter}
-              className="relative px-16 py-6 bg-black/60 backdrop-blur-xl border border-orange-500/30 text-orange-50 font-black text-xl uppercase tracking-widest rounded-2xl overflow-hidden transition-all duration-300 group-hover:border-orange-400 group-hover:shadow-[0_0_50px_rgba(249,115,22,0.4)] focus:outline-none active:scale-95"
+              className="relative px-16 py-6 bg-black/60 backdrop-blur-xl border border-orange-500/30 text-orange-50 font-black text-xl uppercase tracking-widest rounded-2xl overflow-hidden transition-all duration-300 group-hover:border-orange-400 group-hover:shadow-[0_0_50px_rgba(249,115,22,0.4)] focus:outline-none active:scale-95 transform-gpu"
             >
                <div className="absolute top-0 bottom-0 -left-full w-[50%] bg-linear-to-r from-transparent via-white/10 to-transparent skew-x-12 group-hover:animate-[shine_1s_ease-in-out_infinite]" />
                <div className="absolute inset-0 bg-linear-to-r from-orange-500/20 via-red-500/20 to-orange-500/20 translate-y-full group-hover:translate-y-[0%] transition-transform duration-500 ease-out" />

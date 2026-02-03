@@ -1,5 +1,6 @@
 "use client"
 
+import { useCallback } from "react"
 import { motion, useMotionTemplate, useMotionValue } from "framer-motion"
 import { TrendingUp, Smartphone, ShieldCheck, Zap, Gift, Box, Crown } from "lucide-react"
 import Image from "next/image" 
@@ -16,11 +17,11 @@ const UltraCard = ({
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
 
-  function handleMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent) {
+  const handleMouseMove = useCallback(({ currentTarget, clientX, clientY }: React.MouseEvent) => {
     const { left, top } = currentTarget.getBoundingClientRect()
     mouseX.set(clientX - left)
     mouseY.set(clientY - top)
-  }
+  }, [mouseX, mouseY]);
 
   return (
     <motion.div
@@ -30,17 +31,18 @@ const UltraCard = ({
       className={`group relative overflow-hidden rounded-3xl 
         bg-white/5 backdrop-blur-2xl border border-white/10
         shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),inset_0_0_20px_rgba(255,255,255,0.02)]
+        transform-gpu
         ${className}`}
       onMouseMove={handleMouseMove}
     >
       {/* Hover Gradient Effect */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
-         <div className={`absolute inset-[-50%] animate-[spin_3s_linear_infinite] bg-linear-to-r ${gradientColor} via-transparent to-transparent blur-3xl opacity-30`} />
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none will-change-[opacity]">
+         <div className={`absolute inset-[-50%] animate-[spin_3s_linear_infinite] bg-linear-to-r ${gradientColor} via-transparent to-transparent blur-3xl opacity-30 transform-gpu`} />
       </div>
       
       {/* Mouse Spotlight Effect */}
       <motion.div
-        className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 transition duration-300 group-hover:opacity-100 z-10 mix-blend-overlay"
+        className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 transition duration-300 group-hover:opacity-100 z-10 mix-blend-overlay will-change-[opacity]"
         style={{
           background: useMotionTemplate`
             radial-gradient(
@@ -70,7 +72,7 @@ export default function Features() {
       <div className="absolute inset-0 pointer-events-none">
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808010_1px,transparent_1px),linear-gradient(to_bottom,#80808010_1px,transparent_1px)] bg-size-[32px_32px] mask-[linear-gradient(to_bottom,transparent,black_20%)]" />
           
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-200 h-125 bg-orange-600/10 blur-[120px] rounded-full z-0" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-200 h-125 bg-orange-600/10 blur-[120px] rounded-full z-0 transform-gpu" />
           <div className="absolute inset-0 opacity-[0.02] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay" />
       </div>
 
@@ -81,6 +83,7 @@ export default function Features() {
           <motion.div 
              initial={{ opacity: 0, x: -20 }}
              whileInView={{ opacity: 1, x: 0 }}
+             viewport={{ once: true }}
              className="flex items-center gap-2 mb-4"
           >
              <div className="w-2 h-2 bg-orange-500 rounded-full animate-pulse" />
@@ -90,6 +93,7 @@ export default function Features() {
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             className="text-4xl md:text-6xl font-black text-white tracking-tighter mb-6"
           >
             Server <span className="animate-gradient-text border-b-4 border-orange-500 pb-1">Features.</span>
@@ -105,14 +109,15 @@ export default function Features() {
 
           {/* STARTER PACK */}
           <UltraCard className="md:col-span-4 min-h-60" gradientColor="from-cyan-500 via-blue-500 to-purple-500">
-             <div className="absolute right-0 bottom-0 w-64 h-64 bg-cyan-500/10 blur-[80px] rounded-full pointer-events-none" />
+             <div className="absolute right-0 bottom-0 w-64 h-64 bg-cyan-500/10 blur-[80px] rounded-full pointer-events-none transform-gpu" />
              
              <Image 
                 src="/images/icons/bgl.png" 
                 alt="Blue Gem Lock"
                 width={300}
                 height={300}
-                className="absolute -bottom-10 -right-6 w-56 h-auto object-contain opacity-50 rotate-12 pointer-events-none transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6 group-hover:opacity-80 z-0"
+                sizes="(max-width: 768px) 100vw, 33vw"
+                className="absolute -bottom-10 -right-6 w-56 h-auto object-contain opacity-50 rotate-12 pointer-events-none transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6 group-hover:opacity-80 z-0 will-change-transform"
              />
 
              <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center h-full gap-4">
@@ -132,14 +137,15 @@ export default function Features() {
 
           {/* AUTO FARM */}
           <UltraCard className="md:col-span-2 min-h-60" gradientColor="from-yellow-500 via-orange-500 to-red-500">
-             <div className="absolute right-0 bottom-0 w-40 h-40 bg-yellow-500/10 blur-[60px] rounded-full pointer-events-none" />
+             <div className="absolute right-0 bottom-0 w-40 h-40 bg-yellow-500/10 blur-[60px] rounded-full pointer-events-none transform-gpu" />
              
              <Image 
                 src="/images/icons/fist.png" 
                 alt="Fist Icon"
                 width={200}
                 height={200}
-                className="absolute -bottom-6 -right-6 w-40 h-auto object-contain opacity-40 -rotate-12 pointer-events-none transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-6 group-hover:opacity-80 z-0"
+                sizes="(max-width: 768px) 50vw, 20vw"
+                className="absolute -bottom-6 -right-6 w-40 h-auto object-contain opacity-40 -rotate-12 pointer-events-none transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-6 group-hover:opacity-80 z-0 will-change-transform"
              />
 
              <div className="relative z-10 h-full flex flex-col justify-between">

@@ -3,7 +3,11 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ServerProvider } from "@/context/ServerContext";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ 
+  subsets: ["latin"],
+  display: "swap", 
+  adjustFontFallback: false 
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.garudaps.com"),
@@ -41,9 +45,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="id" className="scroll-smooth">
-      <body className={`${inter.className} bg-[#1a1a1a] text-slate-100 antialiased`}>
+      <body className={`${inter.className} bg-[#1a1a1a] text-slate-100 antialiased overflow-x-hidden selection:bg-orange-500/30 selection:text-orange-200`}>
         <ServerProvider>
-        {children}
+          {children}
         </ServerProvider>
       </body>
     </html>

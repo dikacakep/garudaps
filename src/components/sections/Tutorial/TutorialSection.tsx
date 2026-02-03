@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 import { Monitor, Smartphone, Apple, Command, Download, Copy, Check, LucideIcon, Video, Play, Loader2 } from "lucide-react"
@@ -164,7 +164,7 @@ const LazyVideoPlayer = ({
   }
 
   return (
-    <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-black group/video">
+    <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-black group/video transform-gpu">
       
       {!isLoaded && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-zinc-900/80 backdrop-blur-sm z-20">
@@ -221,22 +221,22 @@ export default function TutorialSection() {
   
   const hasVideo = !!activeContent.videoSrc;
 
-  const handleVideoPlay = () => {
+  const handleVideoPlay = useCallback(() => {
     const event = new CustomEvent("garuda-bgm-control", { detail: { action: "pause" } });
     window.dispatchEvent(event);
-  }
+  }, []);
 
-  const handleVideoPause = () => {
+  const handleVideoPause = useCallback(() => {
     const event = new CustomEvent("garuda-bgm-control", { detail: { action: "play" } });
     window.dispatchEvent(event);
-  }
+  }, []);
 
   return (
     <section id="tutorial" className="relative py-24 bg-[#0a0a0a] overflow-hidden">
       
       {/* --- BACKGROUND --- */}
       <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-200 h-200 bg-orange-600/10 blur-[150px] rounded-full" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-200 h-200 bg-orange-600/10 blur-[150px] rounded-full transform-gpu" />
       </div>
 
       <div className="absolute top-0 left-0 w-full h-40 bg-linear-to-b from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
@@ -249,6 +249,7 @@ export default function TutorialSection() {
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter"
           >
             How To <span className="animate-gradient-text border-b-4 border-orange-500 pb-1">Play</span>
@@ -267,14 +268,14 @@ export default function TutorialSection() {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`
-                  relative px-4 py-3 rounded-xl flex items-center gap-2 transition-all duration-300 group
+                  relative px-4 py-3 rounded-xl flex items-center gap-2 transition-all duration-300 group will-change-transform
                   ${activeTab === tab.id ? "bg-orange-600 text-white shadow-lg shadow-orange-500/20" : "hover:bg-white/5 text-white/50 hover:text-white"}
                 `}
               >
                 <tab.icon className={`w-4 h-4 ${activeTab === tab.id ? "text-white" : tab.color}`} />
                 <span className="text-sm font-bold whitespace-nowrap">{tab.label}</span>
                 
-                {/* Indikator ada video */}
+                {/* Indikator video */}
                 {tab.videoSrc && (
                   <span className={`ml-1 flex h-2 w-2 relative ${activeTab === tab.id ? 'opacity-100' : 'opacity-50'}`}>
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
@@ -300,7 +301,7 @@ export default function TutorialSection() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -15, scale: 0.98 }}
               transition={{ duration: 0.3 }}
-              className="relative overflow-hidden rounded-[30px] border border-white/5 shadow-2xl backdrop-blur-xl bg-black/20"
+              className="relative overflow-hidden rounded-[30px] border border-white/5 shadow-2xl backdrop-blur-xl bg-black/20 transform-gpu will-change-transform"
             >
               <div className="absolute inset-0 opacity-[0.04] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none mix-blend-overlay" />
 
@@ -336,6 +337,7 @@ export default function TutorialSection() {
                               src={activeContent.imageSrc} 
                               alt={activeContent.label} 
                               fill 
+                              sizes="(max-width: 768px) 100vw, 33vw"
                               className="object-contain relative z-10 drop-shadow-2xl transition-transform duration-500 group-hover:scale-110"
                             />
                         </div>

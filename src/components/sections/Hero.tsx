@@ -29,6 +29,7 @@ export default function Hero() {
           src="/images/banner.jpg" 
           alt="GarudaPS Background" 
           fill 
+          sizes="100vw"
           className="object-cover opacity-50 blur-[2px]" 
           priority 
         />
@@ -37,7 +38,7 @@ export default function Hero() {
       </div>
 
       {/* --- TOP LIGHT SOURCE --- */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-150 h-75 bg-orange-500/10 blur-[120px] rounded-full pointer-events-none mix-blend-screen" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-150 h-75 bg-orange-500/10 blur-[120px] rounded-full pointer-events-none mix-blend-screen transform-gpu" />
 
       <div className="container relative z-10 px-4 flex flex-col items-center text-center">
         
@@ -53,7 +54,7 @@ export default function Hero() {
               <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${online ? 'bg-green-400' : 'bg-red-400'}`}></span>
               <span className={`relative inline-flex rounded-full h-2 w-2 ${online ? 'bg-green-500' : 'bg-red-500'}`}></span>
             </span>
-            <span className="text-[10px] md:text-xs font-bold text-white/90 uppercase tracking-widest">
+            <span className="text-[10px] md:text-xs font-bold text-white/90 uppercase tracking-widest min-w-30">
               {loading ? (
                 "Checking Server..."
               ) : (
@@ -72,15 +73,16 @@ export default function Hero() {
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.8, type: "spring", bounce: 0.4 }}
-          className="relative w-[320px] md:w-162.5 h-45 md:h-80 mb-8"
+          className="relative w-[320px] md:w-162.5 h-45 md:h-80 mb-8 transform-gpu"
         >
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-orange-600/20 blur-[80px] rounded-full pointer-events-none" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-orange-500/30 blur-2xl rounded-full animate-pulse pointer-events-none" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-orange-600/20 blur-[80px] rounded-full pointer-events-none transform-gpu" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-orange-500/30 blur-2xl rounded-full animate-pulse pointer-events-none transform-gpu" />
           
           <Image
             src="/images/logo/GARUDAPS2026.png"
             alt="GarudaPS Logo"
             fill
+            sizes="(max-width: 768px) 80vw, 40vw"
             className="object-contain drop-shadow-[0_0_35px_rgba(255,92,0,0.7)]"
             priority
           />
