@@ -30,7 +30,7 @@ export default function Hero() {
           alt="GarudaPS Background" 
           fill 
           sizes="100vw"
-          className="object-cover opacity-50 blur-[2px]" 
+          className="object-cover opacity-50 blur-[1px]" 
           priority 
         />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#0a0a0a_85%)]" />
@@ -44,14 +44,14 @@ export default function Hero() {
         
         {/* SERVER STATUS */}
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: -10 }} 
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+          transition={{ delay: 0.1, duration: 0.5 }}
           className="mb-8 md:mb-10"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md shadow-[0_0_20px_rgba(0,0,0,0.5)] hover:bg-white/10 transition-colors cursor-default">
             <span className="relative flex h-2 w-2">
-              <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${online ? 'bg-green-400' : 'bg-red-400'}`}></span>
+              <span className={`hidden md:inline-flex animate-ping absolute h-full w-full rounded-full opacity-75 ${online ? 'bg-green-400' : 'bg-red-400'}`}></span>
               <span className={`relative inline-flex rounded-full h-2 w-2 ${online ? 'bg-green-500' : 'bg-red-500'}`}></span>
             </span>
             <span className="text-[10px] md:text-xs font-bold text-white/90 uppercase tracking-widest min-w-30">
@@ -70,9 +70,9 @@ export default function Hero() {
 
         {/* LOGO */}
         <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
+          initial={{ scale: 0.9, opacity: 0 }} 
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.8, type: "spring", bounce: 0.4 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
           className="relative w-70 h-35 md:w-162.5 md:h-80 mb-8 transform-gpu"
         >
           <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-orange-600/20 blur-[80px] rounded-full pointer-events-none transform-gpu" />
@@ -84,16 +84,16 @@ export default function Hero() {
             alt="GarudaPS Logo"
             fill
             sizes="(max-width: 768px) 80vw, 50vw"
-            className="object-contain drop-shadow-[0_0_20px_rgba(255,92,0,0.5)] md:drop-shadow-[0_0_35px_rgba(255,92,0,0.7)]"
+            className="object-contain drop-shadow-[0_0_15px_rgba(255,92,0,0.4)] md:drop-shadow-[0_0_35px_rgba(255,92,0,0.7)]"
             priority
           />
         </motion.div>
 
         {/* TEXT CONTENT */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
           className="max-w-4xl mx-auto space-y-6 md:space-y-8"
         >
           <h1 className="text-4xl md:text-7xl font-black text-white leading-[0.9] drop-shadow-2xl tracking-tight">

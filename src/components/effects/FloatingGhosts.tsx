@@ -27,6 +27,10 @@ function FloatingGhosts() {
   const [ghosts, setGhosts] = useState<Ghost[]>([])
 
   useEffect(() => {
+    if (typeof window !== "undefined" && window.innerWidth < 768) {
+      return; 
+    }
+
     const generatedGhosts = Array.from({ length: GHOST_COUNT }).map((_, i) => ({
       id: i,
       top: random(-20, 120),

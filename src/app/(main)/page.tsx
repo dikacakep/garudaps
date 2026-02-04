@@ -1,25 +1,45 @@
 import dynamic from "next/dynamic";
-
 import Hero from "@/components/sections/Hero";
-import LeaderboardSection from "@/components/sections/LeaderboardSection";
+
+// --- LOADER COMPONENT ---
+const SectionLoader = ({ height = "h-96" }: { height?: string }) => (
+  <div className={`w-full ${height} bg-[#0a0a0a] flex items-center justify-center`}>
+    {/* Optional: Pulse effect ringan */}
+    <div className="w-full h-full opacity-[0.02] bg-white animate-pulse" />
+  </div>
+)
 
 
-
-const TutorialSection = dynamic(() => import("@/components/sections/Tutorial/TutorialSection"), {
-  loading: () => <div className="h-96 w-full bg-[#0a0a0a]" /> 
+const LeaderboardSection = dynamic(() => import("@/components/sections/LeaderboardSection"), {
+  loading: () => <SectionLoader height="h-[800px]" />
 });
 
-const Features = dynamic(() => import("@/components/sections/Features"));
-const About = dynamic(() => import("@/components/sections/About"));
-const Community = dynamic(() => import("@/components/sections/Community"));
-const Teams = dynamic(() => import("@/components/sections/Teams"));
+const TutorialSection = dynamic(() => import("@/components/sections/Tutorial/TutorialSection"), {
+  loading: () => <SectionLoader height="h-[800px]" />
+});
+
+const Features = dynamic(() => import("@/components/sections/Features"), {
+  loading: () => <SectionLoader height="h-[600px]" />
+});
+
+const About = dynamic(() => import("@/components/sections/About"), {
+  loading: () => <SectionLoader height="h-[600px]" />
+});
+
+const Community = dynamic(() => import("@/components/sections/Community"), {
+  loading: () => <SectionLoader height="h-[400px]" />
+});
+
+const Teams = dynamic(() => import("@/components/sections/Teams"), {
+  loading: () => <SectionLoader height="h-[600px]" />
+});
 
 export default function Home() {
   return (
     <>
       <Hero />
+      
       <LeaderboardSection />
-
       <TutorialSection />
       <Features />
       <About />

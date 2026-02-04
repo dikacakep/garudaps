@@ -226,8 +226,21 @@ video::-moz-media-controls-buffering-loader {
   [class*="animate-[spin"] {
     animation: none !important;
   }
-  
+
+  [class*="bg-[url('"] {
+    background-image: none !important;
+  }
+
+  [class*="mix-blend-"] {
+    mix-blend-mode: normal !important;
+  }
+
   html, body {
     overscroll-behavior-y: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  img, video, div {
+    will-change: auto !important;
   }
 }

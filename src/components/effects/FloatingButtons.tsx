@@ -9,7 +9,7 @@ export default function FloatingButtons() {
       <Link 
         href="https://discord.gg/jhJcGfd4mk" 
         target="_blank"
-        className="w-14 h-14 bg-[#5865F2] rounded-2xl flex items-center justify-center shadow-[0_4px_14px_0_rgba(88,101,242,0.39)] hover:scale-110 transition-transform group relative animate-bounce"
+        className="w-14 h-14 bg-[#5865F2] rounded-2xl flex items-center justify-center shadow-[0_4px_14px_0_rgba(88,101,242,0.39)] hover:scale-110 transition-transform group relative md:animate-bounce"
         style={{ animationDuration: "2s" }} 
       >
         <svg viewBox="0 0 127.14 96.36" className="w-8 h-8 fill-white">
@@ -24,7 +24,7 @@ export default function FloatingButtons() {
       <Link 
         href="https://chat.whatsapp.com/L2L6fFUNzoH1JW7eijiYqk" 
         target="_blank"
-        className="w-14 h-14 bg-[#25D366] rounded-2xl flex items-center justify-center shadow-[0_4px_14px_0_rgba(37,211,102,0.39)] hover:scale-110 transition-transform group relative animate-bounce"
+        className="w-14 h-14 bg-[#25D366] rounded-2xl flex items-center justify-center shadow-[0_4px_14px_0_rgba(37,211,102,0.39)] hover:scale-110 transition-transform group relative md:animate-bounce"
         style={{ animationDuration: "2s", animationDelay: "1s" }} 
       >
         <svg viewBox="0 0 24 24" className="w-8 h-8 fill-white">

@@ -1,13 +1,19 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ServerProvider } from "@/context/ServerContext";
-
 const inter = Inter({ 
   subsets: ["latin"],
   display: "swap", 
-  adjustFontFallback: false 
 });
+
+export const viewport: Viewport = {
+  themeColor: "#0a0a0a",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false, 
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.garudaps.com"),
@@ -28,9 +34,15 @@ export const metadata: Metadata = {
     description: "Start your adventure at GarudaPS with Free BGLs and custom items!",
     url: "https://www.garudaps.com",
     siteName: "GarudaPS",
-    images: [{ url: "/images/banner.jpg", width: 1200, height: 630 }],
+    images: [{ url: "/images/banner.jpg", width: 1200, height: 630, alt: "GarudaPS Banner" }],
     locale: "id_ID",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "GarudaPS - #1 Growtopia Private Server",
+    description: "Join the community. Build, Farm, Trade without limits.",
+    images: ["/images/banner.jpg"],
   },
   robots: {
     index: true,
@@ -45,7 +57,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="id" className="scroll-smooth">
-      <body className={`${inter.className} bg-[#1a1a1a] text-slate-100 antialiased overflow-x-hidden selection:bg-orange-500/30 selection:text-orange-200`}>
+      <body 
+        className={`${inter.className} bg-[#0a0a0a] text-slate-100 antialiased overflow-x-hidden selection:bg-orange-500/30 selection:text-orange-200`}
+      >
         <ServerProvider>
           {children}
         </ServerProvider>
