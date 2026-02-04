@@ -18,6 +18,8 @@ const UltraCard = ({
   const mouseY = useMotionValue(0)
 
   const handleMouseMove = useCallback(({ currentTarget, clientX, clientY }: React.MouseEvent) => {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) return;
+
     const { left, top } = currentTarget.getBoundingClientRect()
     mouseX.set(clientX - left)
     mouseY.set(clientY - top)
@@ -29,20 +31,21 @@ const UltraCard = ({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       className={`group relative overflow-hidden rounded-3xl 
-        bg-white/5 backdrop-blur-2xl border border-white/10
+        bg-white/5 border border-white/10
         shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),inset_0_0_20px_rgba(255,255,255,0.02)]
         transform-gpu
         ${className}`}
       onMouseMove={handleMouseMove}
     >
+      
       {/* Hover Gradient Effect */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none will-change-[opacity]">
+      <div className="hidden md:block absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none will-change-[opacity]">
          <div className={`absolute inset-[-50%] animate-[spin_3s_linear_infinite] bg-linear-to-r ${gradientColor} via-transparent to-transparent blur-3xl opacity-30 transform-gpu`} />
       </div>
       
       {/* Mouse Spotlight Effect */}
       <motion.div
-        className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 transition duration-300 group-hover:opacity-100 z-10 mix-blend-overlay will-change-[opacity]"
+        className="hidden md:block pointer-events-none absolute -inset-px rounded-3xl opacity-0 transition duration-300 group-hover:opacity-100 z-10 mix-blend-overlay will-change-[opacity]"
         style={{
           background: useMotionTemplate`
             radial-gradient(
@@ -64,9 +67,12 @@ const UltraCard = ({
 
 export default function Features() {
   return (
-    <section id="features" className="relative py-24 bg-linear-to-b from-[#0a0a0a] via-black to-black overflow-hidden">
+    <section id="features" className="relative py-24 overflow-hidden">
       
-      <div className="absolute top-0 left-0 w-full h-32 bg-linear-to-b from-[#0a0a0a] to-transparent z-20 pointer-events-none" />
+      {/* --- BACKGROUND BLENDING  --- */}
+      <div className="absolute inset-0 bg-linear-to-b from-[#0a0a0a] via-black to-[#0a0a0a] -z-20" />
+      <div className="absolute top-0 left-0 w-full h-32 bg-linear-to-b from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-full h-32 bg-linear-to-t from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
 
       {/* BACKGROUND ELEMENTS */}
       <div className="absolute inset-0 pointer-events-none">

@@ -1,12 +1,12 @@
 "use client"
 
-import { useState} from "react"
+import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
-import { ArrowRight, Sparkles } from "lucide-react"
+import { ArrowRight, Sparkles, Users, Activity } from "lucide-react"
 
-// --- ICONS  ---
+// --- ICONS ---
 const Icons = {
   discord: ({ className }: { className?: string }) => (
     <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -27,6 +27,7 @@ const Icons = {
 
 export default function Community() {
   const [activeTab, setActiveTab] = useState<"discord" | "whatsapp" | "tiktok">("discord")
+  
   const discordServerId = "989184395590135839" 
 
   const communities = {
@@ -58,21 +59,18 @@ export default function Community() {
   return (
     <section id="community" className="py-24 relative overflow-hidden h-full min-h-screen flex flex-col justify-center bg-black">
       
-      {/* BACKGROUND  */}
+      {/* BACKGROUND */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 w-full h-full mask-[linear-gradient(to_bottom,transparent,black_20%)]">
-            <Image 
-              src="/images/banner.jpg" 
-              alt="Community Background" 
-              fill 
-              sizes="100vw"
-              className="object-cover opacity-80" 
-              priority
-            />
-            {/* Overlay */}
-            <div className="absolute inset-0 bg-black/40 mix-blend-multiply z-10" />
-            <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-transparent z-10" />
-        </div>
+         <Image 
+           src="/images/banner.jpg" 
+           alt="Community Background" 
+           fill 
+           sizes="100vw"
+           className="object-cover opacity-60" 
+           priority={false}
+         />
+         {/* Overlay */}
+         <div className="absolute inset-0 bg-linear-to-b from-black via-black/80 to-black" />
       </div>
 
       <div className="container px-4 mx-auto relative z-20">
@@ -138,19 +136,19 @@ export default function Community() {
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
-              initial={{ opacity: 0, y: 15, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -15, scale: 0.98 }}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.3 }}
-              className="relative overflow-hidden bg-[#111]/60 backdrop-blur-lg border border-white/10 rounded-4xl p-6 md:p-12 shadow-2xl flex flex-col lg:flex-row gap-12 items-center min-h-125 transform-gpu will-change-transform"
+              className="relative overflow-hidden bg-[#111]/80 border border-white/10 rounded-4xl p-6 md:p-12 shadow-2xl flex flex-col lg:flex-row gap-12 items-center min-h-125 transform-gpu will-change-transform"
             >
               
-              {/* --- LEFT SIDE  --- */}
+              {/* --- LEFT SIDE (Text) --- */}
               <div className="flex-1 text-center lg:text-left space-y-8 relative z-10">
                 <div>
                    <h3 className="text-4xl md:text-6xl font-black text-white leading-none uppercase drop-shadow-md">
                      Join Our <br />
-                     <span style={{ color: activeData.color, filter: `drop-shadow(0 0 20px ${activeData.color}50)` }}>
+                     <span style={{ color: activeData.color }}>
                        {activeData.title}
                      </span>
                    </h3>
@@ -164,7 +162,7 @@ export default function Community() {
                   <Button
                     size="lg"
                     asChild
-                    className="relative overflow-hidden group text-white px-8 h-14 rounded-xl font-bold text-lg shadow-[0_10px_30px_rgba(0,0,0,0.5)] border-0 transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_20px_40px_rgba(0,0,0,0.6)]"
+                    className="relative overflow-hidden group text-white px-8 h-14 rounded-xl font-bold text-lg shadow-lg border-0 transition-all duration-300 hover:scale-[1.02]"
                     style={{ backgroundColor: activeData.color }}
                   >
                     <a href={activeData.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3">
@@ -173,26 +171,24 @@ export default function Community() {
                         Join Now
                       </span>
                       <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                      <div className="absolute inset-0 -translate-x-full group-hover:translate-x-[150%] bg-linear-to-r from-transparent via-white/30 to-transparent z-0 transition-transform duration-700 ease-in-out skew-x-12 w-full" />
                     </a>
                   </Button>
                 </div>
               </div>
 
-              {/* --- RIGHT SIDE  --- */}
+              {/* --- RIGHT SIDE (Widget) --- */}
               <div className="w-full lg:w-112.5 shrink-0 flex justify-center relative z-10 perspective-[1000px]">
                 
-                {/* DISCORD */}
+                {/* DISCORD CARD */}
                 {activeTab === "discord" && (
                   <div 
-                    className="relative w-full h-125 rounded-2xl overflow-hidden bg-[#1e1f22] transition-all duration-500 group hover:scale-[1.02]"
-                    style={{ boxShadow: `0 0 40px ${communities.discord.color}30`, border: `1px solid ${communities.discord.color}40` }}
+                    className="relative w-full h-80 rounded-3xl overflow-hidden bg-[#2f3136] transition-all duration-500 group hover:scale-[1.02] border border-[#202225] shadow-2xl"
                   >
-                    <iframe 
+                     <iframe 
                       src={`https://discord.com/widget?id=${discordServerId}&theme=dark`} 
                       width="100%" 
                       height="100%" 
-                      frameBorder="0" 
+                      style={{ border: 0 }}
                       loading="lazy"
                       sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
                       className="absolute inset-0 w-full h-full"
@@ -200,43 +196,36 @@ export default function Community() {
                   </div>
                 )}
 
-                {/* WHATSAPP  */}
+                {/* WHATSAPP CARD */}
                 {activeTab === "whatsapp" && (
                    <div 
-                     className="w-full h-100 relative rounded-3xl overflow-hidden flex flex-col items-center justify-center p-8 text-center transition-all duration-500 group hover:scale-[1.02]"
-                     style={{ boxShadow: `0 0 40px ${communities.whatsapp.color}30`, border: `1px solid ${communities.whatsapp.color}40` }}
+                     className="w-full h-80 relative rounded-3xl overflow-hidden flex flex-col items-center justify-center p-8 text-center bg-[#075E54] border border-[#25D366]/30 group hover:scale-[1.02] transition-all"
                    >
-                      <div className="absolute inset-0 bg-linear-to-br from-[#075E54] to-[#050505] opacity-90 z-0" />
-                      <div className="relative z-10 w-28 h-28 rounded-3xl bg-[#25D366] flex items-center justify-center mb-6 text-white shadow-[0_20px_40px_rgba(0,0,0,0.5)] group-hover:scale-110 transition-transform duration-500">
-                         <Icons.whatsapp className="w-16 h-16" />
+                      <div className="absolute inset-0 bg-[url('/images/pattern.png')] opacity-10" />
+                      <div className="relative z-10 w-24 h-24 rounded-3xl bg-[#25D366] flex items-center justify-center mb-6 text-white shadow-xl">
+                         <Icons.whatsapp className="w-14 h-14" />
                       </div>
-                      <div className="relative z-10">
-                        <h3 className="text-white font-bold text-3xl mb-2">WhatsApp Group</h3>
-                        <p className="text-white/60 text-sm">Tap button on the left to join.</p>
-                      </div>
+                      <h3 className="text-white font-bold text-2xl mb-1">WhatsApp Group</h3>
+                      <p className="text-white/70 text-sm">Official Announcements Only</p>
                    </div>
                 )}
 
-                {/* TIKTOK  */}
+                {/* TIKTOK CARD */}
                 {activeTab === "tiktok" && (
                    <div 
-                      className="w-full h-100 relative rounded-3xl overflow-hidden flex flex-col items-center justify-center p-8 text-center transition-all duration-500 group hover:scale-[1.02]"
-                      style={{ 
-                        boxShadow: `0 0 40px ${communities.tiktok.color}30`, 
-                        border: `1px solid ${communities.tiktok.color}40`,
-                        background: "linear-gradient(145deg, #111 0%, #000 100%)"
-                      }}
+                      className="w-full h-80 relative rounded-3xl overflow-hidden flex flex-col items-center justify-center p-8 text-center bg-black border border-[#FE2C55]/30 group hover:scale-[1.02] transition-all"
                    >
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-[#FE2C55] blur-[80px] opacity-20 animate-pulse" />
-                      <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#25F4EE] blur-[80px] opacity-20 animate-pulse" />
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-[#FE2C55] blur-[60px] opacity-20" />
+                      <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#25F4EE] blur-[60px] opacity-20" />
 
-                      <div className="relative z-10 w-28 h-28 rounded-full bg-black flex items-center justify-center mb-6 text-white shadow-[0_20px_40px_rgba(0,0,0,0.5)] border border-white/10 group-hover:rotate-6 transition-transform duration-500">
-                         <Icons.tiktok className="w-14 h-14" />
+                      <div className="relative z-10 w-24 h-24 rounded-full bg-[#111] flex items-center justify-center mb-6 text-white border border-white/10 shadow-xl group-hover:rotate-6 transition-transform">
+                         <Icons.tiktok className="w-12 h-12" />
                       </div>
                       
-                      <div className="relative z-10">
-                         <h3 className="text-white font-bold text-3xl mb-1">@irexusgtps</h3>
-                         <p className="text-white/70 text-sm font-medium tracking-wide">Official TikTok Account</p>
+                      <h3 className="text-white font-bold text-2xl mb-1">@irexusgtps</h3>
+                      <div className="flex items-center gap-4 text-sm text-white/60 mt-2">
+                         <span className="flex items-center gap-1"><Users className="w-3 h-3" /> 10.5k</span>
+                         <span className="flex items-center gap-1"><Activity className="w-3 h-3" /> 500k Likes</span>
                       </div>
                    </div>
                 )}

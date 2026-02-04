@@ -160,7 +160,7 @@ const LazyVideoPlayer = ({
 
   const handleLoadClick = () => {
     setIsLoaded(true)
-    onPlaySignal() 
+    // onPlaySignal will be triggered by onPlay event from video element
   }
 
   return (
@@ -172,14 +172,14 @@ const LazyVideoPlayer = ({
           
           <button 
             onClick={handleLoadClick}
-            className="relative group/btn flex items-center justify-center w-20 h-20 rounded-full bg-white/10 border border-white/20 backdrop-blur-md hover:scale-110 hover:bg-orange-600 hover:border-orange-500 transition-all duration-300"
+            className="relative group/btn flex items-center justify-center w-20 h-20 rounded-full bg-white/10 border border-white/20 backdrop-blur-md hover:scale-110 hover:bg-orange-600 hover:border-orange-500 transition-all duration-300 cursor-pointer z-30"
           >
             <Play className="w-8 h-8 text-white fill-white translate-x-1" />
             
             <span className="absolute -inset-2 rounded-full border border-white/10 animate-ping opacity-50 pointer-events-none" />
           </button>
           
-          <span className="mt-4 text-xs font-mono text-white/50 uppercase tracking-widest">
+          <span className="mt-4 text-xs font-mono text-white/50 uppercase tracking-widest relative z-30">
             Click to Load Tutorial
           </span>
         </div>
@@ -196,9 +196,7 @@ const LazyVideoPlayer = ({
         <video
           ref={videoRef}
           src={src}
-          
           controls={!isBuffering} 
-          
           autoPlay 
           className="w-full h-full object-contain bg-black"
           onPlay={onPlaySignal}
@@ -222,11 +220,13 @@ export default function TutorialSection() {
   const hasVideo = !!activeContent.videoSrc;
 
   const handleVideoPlay = useCallback(() => {
+    // Matikan BGM saat video play
     const event = new CustomEvent("garuda-bgm-control", { detail: { action: "pause" } });
     window.dispatchEvent(event);
   }, []);
 
   const handleVideoPause = useCallback(() => {
+    // Nyalakan BGM saat video pause
     const event = new CustomEvent("garuda-bgm-control", { detail: { action: "play" } });
     window.dispatchEvent(event);
   }, []);
@@ -236,11 +236,12 @@ export default function TutorialSection() {
       
       {/* --- BACKGROUND --- */}
       <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-200 h-200 bg-orange-600/10 blur-[150px] rounded-full transform-gpu" />
+          {/* Blur dikurangi di mobile */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 md:w-200 md:h-200 bg-orange-600/10 blur-3xl md:blur-[150px] rounded-full transform-gpu" />
       </div>
 
-      <div className="absolute top-0 left-0 w-full h-40 bg-linear-to-b from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-full h-40 bg-linear-to-t from-black to-transparent z-10 pointer-events-none" />
+      <div className="absolute top-0 left-0 w-full h-32 md:h-40 bg-linear-to-b from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-full h-32 md:h-40 bg-linear-to-t from-black to-transparent z-10 pointer-events-none" />
 
       <div className="container relative z-10 px-4 mx-auto">
         
@@ -262,13 +263,13 @@ export default function TutorialSection() {
         <div className="max-w-6xl mx-auto">
           
           {/* TAB BUTTONS */}
-          <div className="flex flex-wrap md:flex-nowrap justify-center gap-2 mb-8 p-2 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm relative z-20">
+          <div className="flex overflow-x-auto pb-4 md:pb-0 md:justify-center gap-2 mb-8 p-2 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm relative z-20 scrollbar-hide">
             {TUTORIAL_DATA.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`
-                  relative px-4 py-3 rounded-xl flex items-center gap-2 transition-all duration-300 group will-change-transform
+                  relative px-4 py-3 rounded-xl flex items-center gap-2 transition-all duration-300 group will-change-transform shrink-0
                   ${activeTab === tab.id ? "bg-orange-600 text-white shadow-lg shadow-orange-500/20" : "hover:bg-white/5 text-white/50 hover:text-white"}
                 `}
               >
@@ -297,9 +298,9 @@ export default function TutorialSection() {
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
-              initial={{ opacity: 0, y: 15, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -15, scale: 0.98 }}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.3 }}
               className="relative overflow-hidden rounded-[30px] border border-white/5 shadow-2xl backdrop-blur-xl bg-black/20 transform-gpu will-change-transform"
             >

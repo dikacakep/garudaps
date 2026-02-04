@@ -28,9 +28,9 @@ const teamMembers = [
   },
   {
     id: "rasha",
-    name: "Ryo",
+    name: "Euum",
     role: "Senior Staff",
-    avatar: "/images/team/RYo.jpeg",
+    avatar: "/images/team/Euum.jpeg",
     color: "#22C55E",
     stats: "03",
     icon: Shield,
@@ -38,9 +38,9 @@ const teamMembers = [
   },
   {
     id: "sho",
-    name: "Hades",
+    name: "Sho",
     role: "Senior Staff",
-    avatar: "/images/team/Sho.jpeg",
+    avatar: "/images/team/Rey.jpeg",
     color: "#22C55E",
     stats: "04",
     icon: Shield,
@@ -82,20 +82,21 @@ export default function Teams() {
   const [activeIndex, setActiveIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
 
+  // Auto-play logic
   useEffect(() => {
     if (isPaused) return;
 
     const interval = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % teamMembers.length);
-    }, 4000);
+    }, 4000); 
 
     return () => clearInterval(interval);
   }, [isPaused]);
 
   return (
-    <section id="teams" className="py-24 min-h-screen bg-linear-to-b from-black to-[#0a0a0a] relative flex items-center justify-center overflow-hidden">
+    <section id="teams" className="py-24 bg-linear-to-b from-black to-[#0a0a0a] relative flex items-center justify-center overflow-hidden">
 
-      {/* Background */}
+      {/* Background (Optimized) */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-[-20%] left-[-10%] w-200 h-200 bg-orange-600/5 blur-[120px] rounded-full transform-gpu" />
         <div className="absolute bottom-[-20%] right-[-10%] w-200 h-200 bg-blue-600/5 blur-[120px] rounded-full transform-gpu" />
@@ -163,14 +164,14 @@ export default function Teams() {
 
                   {/* Dark Gradient Overlay */}
                   <div className={`absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent transition-opacity duration-500 ${isActive ? 'opacity-90' : 'opacity-80'}`} />
-
-                  <div
+                  
+                  <div 
                     className={`absolute inset-0 bg-linear-to-b from-transparent to-black/90 transition-opacity duration-500 ${isActive ? 'opacity-100' : 'opacity-0'}`}
-                    style={{ mixBlendMode: 'multiply' }}
-                  />
+                    style={{ mixBlendMode: 'multiply' }} 
+                   />
                 </div>
 
-                {/* PROGRESS BAR  */}
+                {/* PROGRESS BAR */}
                 {isActive && !isPaused && (
                   <motion.div
                     className="absolute bottom-0 left-0 h-1 z-30 bg-white"
@@ -181,9 +182,9 @@ export default function Teams() {
                   />
                 )}
 
-                {/* INACTIVE STATE  */}
+                {/* INACTIVE STATE LABEL */}
                 {!isActive && (
-                  <div className="absolute inset-0 z-10 flex items-center justify-center">
+                  <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
                     <div className="lg:[writing-mode:vertical-rl] lg:rotate-180 flex items-center gap-4 opacity-50">
                       <h3 className="text-sm md:text-lg font-bold text-white tracking-[0.2em] uppercase whitespace-nowrap">
                         {member.name}
@@ -201,7 +202,7 @@ export default function Teams() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0 }}
                       transition={{ duration: 0.5, delay: 0.2 }}
-                      className="absolute inset-0 z-20 p-6 md:p-10 flex flex-col justify-end"
+                      className="absolute inset-0 z-20 p-6 md:p-10 flex flex-col justify-end pointer-events-none"
                     >
                       <div className="absolute -top-10 -right-10 text-[150px] font-black text-white/5 select-none leading-none z-0">
                         {member.stats}
@@ -234,8 +235,8 @@ export default function Teams() {
                 </AnimatePresence>
 
                 {/* Border Glow Active */}
-                <div className={`absolute inset-0 border-2 rounded-3xl pointer-events-none transition-all duration-500 ${isActive ? 'border-white/10' : 'border-transparent'}`}
-                  style={{ borderColor: isActive ? `${member.color}40` : '' }}
+                <div className={`absolute inset-0 border-2 rounded-3xl pointer-events-none transition-all duration-500 ${isActive ? 'border-white/10' : 'border-transparent'}`} 
+                     style={{ borderColor: isActive ? `${member.color}40` : '' }}
                 />
 
               </motion.div>
@@ -246,8 +247,8 @@ export default function Teams() {
         {/* Helper Text */}
         <div className="flex justify-center gap-6 mt-8 opacity-40">
           <div className="flex items-center gap-2 text-[10px] font-mono text-white uppercase">
-            <Users className="w-3 h-3" />
-            <span>Hover to Pause</span>
+             <Users className="w-3 h-3" />
+             <span>Hover to Pause</span>
           </div>
         </div>
 

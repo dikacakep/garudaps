@@ -46,7 +46,7 @@ function FloatingGhosts() {
   if (ghosts.length === 0) return null
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden pointer-events-none select-none h-screen w-screen">
+    <div className="hidden md:block fixed inset-0 z-50 overflow-hidden pointer-events-none select-none h-screen w-screen">
       {ghosts.map((ghost) => (
         <motion.div
           key={ghost.id}

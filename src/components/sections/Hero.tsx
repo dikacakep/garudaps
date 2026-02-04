@@ -21,7 +21,7 @@ export default function Hero() {
   }
 
   return (
-    <section id="home" className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden py-20">
+    <section id="home" className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden py-24">
       
       {/* --- BACKGROUND LAYER --- */}
       <div className="absolute inset-0 z-0">
@@ -38,7 +38,7 @@ export default function Hero() {
       </div>
 
       {/* --- TOP LIGHT SOURCE --- */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-150 h-75 bg-orange-500/10 blur-[120px] rounded-full pointer-events-none mix-blend-screen transform-gpu" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 md:w-150 md:h-75 bg-orange-500/10 blur-3xl md:blur-[120px] rounded-full pointer-events-none mix-blend-screen transform-gpu" />
 
       <div className="container relative z-10 px-4 flex flex-col items-center text-center">
         
@@ -47,7 +47,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="mb-10"
+          className="mb-8 md:mb-10"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md shadow-[0_0_20px_rgba(0,0,0,0.5)] hover:bg-white/10 transition-colors cursor-default">
             <span className="relative flex h-2 w-2">
@@ -61,7 +61,7 @@ export default function Hero() {
                 <>
                   Server {online ? "Online" : "Offline"} 
                   <span className="mx-2 text-white/20">|</span> 
-                  {players} Players Online
+                  {players} Players
                 </>
               )}
             </span>
@@ -73,17 +73,18 @@ export default function Hero() {
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.8, type: "spring", bounce: 0.4 }}
-          className="relative w-[320px] md:w-162.5 h-45 md:h-80 mb-8 transform-gpu"
+          className="relative w-70 h-35 md:w-162.5 md:h-80 mb-8 transform-gpu"
         >
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-orange-600/20 blur-[80px] rounded-full pointer-events-none transform-gpu" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-orange-500/30 blur-2xl rounded-full animate-pulse pointer-events-none transform-gpu" />
+          <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-orange-600/20 blur-[80px] rounded-full pointer-events-none transform-gpu" />
+          
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-orange-500/20 md:bg-orange-500/30 blur-xl md:blur-2xl rounded-full animate-pulse pointer-events-none transform-gpu" />
           
           <Image
             src="/images/logo/GARUDAPS2026.png"
             alt="GarudaPS Logo"
             fill
-            sizes="(max-width: 768px) 80vw, 40vw"
-            className="object-contain drop-shadow-[0_0_35px_rgba(255,92,0,0.7)]"
+            sizes="(max-width: 768px) 80vw, 50vw"
+            className="object-contain drop-shadow-[0_0_20px_rgba(255,92,0,0.5)] md:drop-shadow-[0_0_35px_rgba(255,92,0,0.7)]"
             priority
           />
         </motion.div>
@@ -93,43 +94,43 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="max-w-4xl mx-auto space-y-8"
+          className="max-w-4xl mx-auto space-y-6 md:space-y-8"
         >
           <h1 className="text-4xl md:text-7xl font-black text-white leading-[0.9] drop-shadow-2xl tracking-tight">
             BUILD YOUR <span className="animate-gradient-text filter drop-shadow-[0_0_20px_rgba(234,88,12,0.5)]">EMPIRE.</span>
           </h1>
           
-          <p className="text-lg md:text-xl text-white/70 leading-relaxed max-w-2xl mx-auto drop-shadow-md font-medium">
+          <p className="text-base md:text-xl text-white/70 leading-relaxed max-w-xl md:max-w-2xl mx-auto drop-shadow-md font-medium px-4">
             Join the ultimate Growtopia Private Server experience. 
             Custom items, balanced economy, and a legendary community waiting for you.
           </p>
 
           {/* BUTTONS */}
-          <div className="flex flex-col md:flex-row items-center justify-center gap-5 pt-2">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4 pt-4 w-full px-8 md:px-0">
             
             <Button
               size="lg"
               onClick={() => scrollToSection("tutorial")}
-              className="h-14 px-10 rounded-full bg-linear-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white font-bold text-lg shadow-[0_0_50px_rgba(234,88,12,0.5)] border border-orange-400/50 transition-transform hover:scale-105 hover:shadow-[0_0_70px_rgba(234,88,12,0.7)]"
+              className="w-full md:w-auto h-12 md:h-14 px-8 rounded-full bg-linear-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white font-bold text-lg shadow-[0_0_30px_rgba(234,88,12,0.4)] border border-orange-400/50 transition-transform active:scale-95"
             >
-              <Play className="mr-2 h-6 w-6 fill-white" /> PLAY NOW
+              <Play className="mr-2 h-5 w-5 md:h-6 md:w-6 fill-white" /> PLAY NOW
             </Button>
 
             <Button
               size="lg"
               onClick={openShop}
-              className="h-14 px-10 rounded-full bg-[#FFD700]/10 hover:bg-[#FFD700]/20 text-[#FFD700] border border-[#FFD700]/30 backdrop-blur-md font-bold text-lg shadow-[0_0_20px_rgba(255,215,0,0.1)] transition-all hover:border-[#FFD700]/60"
+              className="w-full md:w-auto h-12 md:h-14 px-8 rounded-full bg-[#FFD700]/10 hover:bg-[#FFD700]/20 text-[#FFD700] border border-[#FFD700]/30 backdrop-blur-md font-bold text-lg shadow-[0_0_20px_rgba(255,215,0,0.1)] transition-all active:scale-95"
             >
-              <ShoppingCart className="mr-2 h-6 w-6" /> SHOP
+              <ShoppingCart className="mr-2 h-5 w-5 md:h-6 md:w-6" /> SHOP
             </Button>
 
             <Button
               size="lg"
               variant="outline"
               onClick={() => scrollToSection("community")}
-              className="h-14 px-8 rounded-full bg-white/5 hover:bg-white/10 text-white border-white/10 backdrop-blur-md font-bold text-lg transition-all hover:border-white/30"
+              className="w-full md:w-auto h-12 md:h-14 px-8 rounded-full bg-white/5 hover:bg-white/10 text-white border-white/10 backdrop-blur-md font-bold text-lg transition-all active:scale-95"
             >
-              <MessageCircle className="mr-2 h-6 w-6" /> Discord
+              <MessageCircle className="mr-2 h-5 w-5 md:h-6 md:w-6" /> Discord
             </Button>
           </div>
 

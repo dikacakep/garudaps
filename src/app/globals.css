@@ -3,6 +3,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* --- Global Reset & Base Styles --- */
 video::-webkit-media-controls-buffering-loader {
   display: none !important;
   opacity: 0 !important;
@@ -85,9 +86,32 @@ video::-moz-media-controls-buffering-loader {
   --sidebar-ring: oklch(0.439 0 0);
 }
 
+/* --- Keyframes (Global Scope) --- */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes float-delayed {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+@keyframes gradient-move {
+  0% { background-position: 0% 50%; }
+  100% { background-position: -200% 50%; }
+}
+
+@keyframes scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* --- Theme Configuration --- */
 @theme inline {
   --font-sans: "Geist", "Geist Fallback";
   --font-mono: "Geist Mono", "Geist Mono Fallback";
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -107,15 +131,13 @@ video::-moz-media-controls-buffering-loader {
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -124,51 +146,19 @@ video::-moz-media-controls-buffering-loader {
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
   --animate-float: float 6s ease-in-out infinite;
   --animate-float-delayed: float-delayed 7s ease-in-out infinite;
-
-  @keyframes float {
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-20px);
-    }
-  }
-
-  @keyframes float-delayed {
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-15px);
-    }
-  }
-
-  @keyframes gradient-move {
-    0% {
-      background-position: 0% 50%;
-    }
-    100% {
-      background-position: -200% 50%;
-    }
-  }
-
-  @keyframes scroll {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(-50%);
-    }
-  }
-
   --animate-gradient: gradient-move 3s linear infinite;
   --animate-scroll: scroll 40s linear infinite;
 }
 
+/* --- Utilities & Base Layers --- */
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -181,13 +171,10 @@ video::-moz-media-controls-buffering-loader {
 @layer utilities {
   .animate-gradient-text {
     background: linear-gradient(90deg, #ff5c00, #ffc400, #ffffff, #ffc400, #ff5c00);
-    
     background-size: 200% auto;
-    
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    
     animation: gradient-move 4s linear infinite;
   }
 
@@ -211,12 +198,36 @@ video::-moz-media-controls-buffering-loader {
 
   .btn-gradient-hover:hover {
     background: linear-gradient(90deg, #ff5c00, #ffc400, #ffffff, #ffc400, #ff5c00);
-    
     background-size: 200% auto;
-    
     animation: gradient-move 2s linear infinite;
     color: #000 !important;
     border-color: transparent;
     box-shadow: 0 0 30px rgba(255, 92, 0, 0.6);
+  }
+}
+
+@media (max-width: 768px) {
+  .backdrop-blur-sm,
+  .backdrop-blur-md,
+  .backdrop-blur-xl,
+  .backdrop-blur-2xl,
+  .backdrop-blur-3xl {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background-color: rgba(10, 10, 10, 0.95) !important; 
+  }
+
+  * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  .animate-spin, 
+  [class*="animate-[spin"] {
+    animation: none !important;
+  }
+  
+  html, body {
+    overscroll-behavior-y: none;
   }
 }
